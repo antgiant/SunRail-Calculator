@@ -8,6 +8,7 @@
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
     <script>
+      $(document).ready(setupCalendar)
       function increment(id) {
         if (parseInt($("#"+id+" .value").text()) <= 18) {
           $("#"+id+" .value").text(parseInt($("#"+id+" .value").text())+1);
@@ -16,6 +17,50 @@
       function decrement(id) {
         if (parseInt($("#"+id+" .value").text()) > 0) {
           $("#"+id+" .value").text(parseInt($("#"+id+" .value").text())-1);
+        }
+      }
+      //Thank you https://stackoverflow.com/questions/563406/add-days-to-datetime
+      Date.prototype.addDay = function()
+      {
+        var dat = new Date(this.valueOf());
+        dat.setDate(dat.getDate() + 1);
+        return dat;
+      }
+      function setupCalendar() {
+        var today = new Date();
+        var offset = today.getDay() + 1;
+        var monthNames = ["January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        
+        //Remove Past Days of this week
+        for (i = 1; i < offset; i++) {
+          $("#"+i).text("");
+        }
+
+        //Remove Days more than a year into the future
+        for (i = offset + 366; i <= 378; i++) {
+          $("#"+i).text("");
+        }
+        
+        //Setup Calendar
+        var temp = new Date();
+        for(i = 1; i <= 366; i++) {
+          //Renumber Dates to match current reality
+          $("#"+(i + offset - 1)+" .date").text(temp.getDate());
+          
+          //Style even and odd months
+          if (temp.getMonth() % 2 == 1){
+             $("#"+(i + offset - 1)).addClass("evenmonth");
+          } else {
+             $("#"+(i + offset - 1)).addClass("oddmonth");
+          }
+          
+          //Setup Month Label
+          if (i%7 == 0) {
+            $("#week"+(Math.floor(i/7))).text(monthNames[temp.getMonth()] + " " + temp.getFullYear());
+          }
+          
+          temp = temp.addDay();
         }
       }
     </script>
