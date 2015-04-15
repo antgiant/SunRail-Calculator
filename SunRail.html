@@ -56,8 +56,14 @@
           }
           
           //Setup Month Label
-          if (i%7 == 0) {
-            $("#week"+(Math.floor(i/7))).text(monthNames[temp.getMonth()] + " " + temp.getFullYear());
+          if ((i + offset - 1)%7 == 0 || i == 366) {
+            $("#week"+(Math.floor(i/7) + 1)).text(monthNames[temp.getMonth()] + " " + temp.getFullYear());
+          //Style even and odd months
+            if (temp.getMonth() % 2 == 1){
+               $("#week"+(Math.floor(i/7) + 1)).addClass("evenmonth");
+            } else {
+               $("#week"+(Math.floor(i/7) + 1)).addClass("oddmonth");
+            }
           }
           
           temp = temp.addDay();
