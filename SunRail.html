@@ -12,11 +12,20 @@
       function increment(id) {
         if (parseInt($("#"+id+" .value").text()) <= 18) {
           $("#"+id+" .value").text(parseInt($("#"+id+" .value").text())+1);
+          calculateTickets();
         }
       }
       function decrement(id) {
         if (parseInt($("#"+id+" .value").text()) > 0) {
           $("#"+id+" .value").text(parseInt($("#"+id+" .value").text())-1);
+          calculateTickets();
+        }
+      }
+      function calculateTickets() {
+        if (Math.random() > 0.5) {
+          $("#20").addClass("day");
+        } else {
+          $("#20").removeClass("day week month year");
         }
       }
       //Thank you https://stackoverflow.com/questions/563406/add-days-to-datetime
