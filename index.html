@@ -10,7 +10,7 @@
     <script>
       //Setup global variables to hold various information.
       var offset = 0;
-      var rides = new Array(366);
+      rides = new Object;
       var tickets = new Array(366);
       for (var i = 0; i < 366; i++) { 
         rides[i] = 0;
@@ -32,10 +32,17 @@
         }
       }
       function calculateTickets() {
-        if (Math.random() > 0.5) {
-          $("#20").addClass("day");
-        } else {
-          $("#20").removeClass("day week month year");
+        //Remove and Add Tickets (Colors) as needed
+
+        //Remove previous tickets
+        $("td").removeClass("day week month year");
+        for (var i = 0; i < 366; i++) {
+          //Add Correct tickets
+          if (parseInt($("#"+(i + offset)+" .value").text()) > 0) {
+            $("#"+(i + offset)).addClass("day");
+          } else {
+            
+          }
         }
       }
       //Thank you https://stackoverflow.com/questions/563406/add-days-to-datetime
