@@ -10,11 +10,12 @@
     <script>
       //Setup global variables to hold various information.
       var offset = 0;
-      rides = new Object;
-      var tickets = new Array(366);
+      tickets = new Object;
+      var cost = new Array(366);
+      var rides = new Array(366);
       for (var i = 0; i < 366; i++) { 
+        cost[i] = 0;
         rides[i] = 0;
-        tickets[i] = 0;
       }
       $(document).ready(setupCalendar)
       function increment(id) {
@@ -32,17 +33,47 @@
         }
       }
       function calculateTickets() {
-        //Remove and Add Tickets (Colors) as needed
-
-        //Remove previous tickets
+        //Get ticket prices
+        roundtrip = parseInt($("#roundtrip").text());
+        weektrip = parseInt($("#weeklytrip").text());
+        monthtrip = parseInt($("#monthtrip").text());
+        yeartrip = parseInt($("#yeartrip").text());
+        
+        //Remove previous ticket selections
         $("td").removeClass("day week month year");
+        delete tickets.round;
+        delete tickets.week;
+        delete tickets.month;
+        delete tickets.year;
+        
+
+        //Master Calculation Loop
         for (var i = 0; i < 366; i++) {
-          //Add Correct tickets
-          if (parseInt($("#"+(i + offset)+" .value").text()) > 0) {
-            $("#"+(i + offset)).addClass("day");
-          } else {
-            
+          //If roundtrip(s) are cheaper buy them (but prefer longer trip if same price).
+          if (((rides[i]*roundtrip)+cost[(i<0?0:i)]) < ((weektrip)+cost[((i - 7)<0?0:(i - 7))]) &&
+              ((rides[i]*roundtrip)+cost[(i<0?0:i)]) < ((monthtrip)+cost[((i - 30)<0?0:(i - 30))])) {
+            //Record round trip(s) as cheapest
           }
+          //If week trip is cheapest buy it (but prefer longer trip if same price).
+          else if (((weektrip)+cost[((i - 7)<0?0:(i - 7))]) < ((monthtrip)+cost[((i - 30)<0?0:(i - 30))])) {
+            //Record week trip as cheapest
+          }
+          else {
+            //Record Month trip as cheapest
+          }
+          
+          if(i == 365 && yeartrip <= cost[i]) {
+            //Record Year trip as cheapest
+          }
+
+          //Output cheapest option
+          //$("#"+(i + offset)).addClass("day");
+
+          /**
+          Buy round trip tickets today: cost 3*w+C[100]
+          Buy a 7 day ticket 7 days ago: cost x+C[101-7]
+          Buy a 30 day ticket 30 days ago: cost y+C[101-30]
+          **/
         }
       }
       //Thank you https://stackoverflow.com/questions/563406/add-days-to-datetime
