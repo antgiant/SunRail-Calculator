@@ -10,12 +10,15 @@
     <script>
       //Setup global variables to hold various information.
       var offset = 0;
-      tickets = new Object;
       var cost = new Array(366);
       var rides = new Array(366);
+      var previousTicket = new Array(366);
+      var currentTicket = new Array(366);
       for (var i = 0; i < 366; i++) { 
         cost[i] = 0;
         rides[i] = 0;
+        previousTicket[i] = -1;
+        currentTicket[i] = -1;
       }
       $(document).ready(setupCalendar)
       function increment(id) {
@@ -40,40 +43,92 @@
         yeartrip = parseInt($("#yeartrip").text());
         
         //Remove previous ticket selections
-        $("td").removeClass("day week month year");
-        delete tickets.round;
-        delete tickets.week;
-        delete tickets.month;
-        delete tickets.year;
-        
+        $("td").removeClass("day week month year");        
 
         //Master Calculation Loop
         for (var i = 0; i < 366; i++) {
+          //Erase old incorrect values
+          previousTicket[i] = -1;
+          currentTicket[i] = -1;
+          cost[i] = 0;
+
           //If roundtrip(s) are cheaper buy them (but prefer longer trip if same price).
-          if (((rides[i]*roundtrip)+cost[(i<0?0:i)]) < ((weektrip)+cost[((i - 7)<0?0:(i - 7))]) &&
-              ((rides[i]*roundtrip)+cost[(i<0?0:i)]) < ((monthtrip)+cost[((i - 30)<0?0:(i - 30))])) {
+          if (((rides[i]*roundtrip)+cost[((i - 1)<0?0:i - 1)]) < ((weektrip)+cost[((i - 7)<0?0:(i - 7))]) &&
+              ((rides[i]*roundtrip)+cost[(i - 1)<0?0:i - 1]) < ((monthtrip)+cost[((i - 30)<0?0:(i - 30))])) {
             //Record round trip(s) as cheapest
+            cost[i] = (rides[i]*roundtrip)+cost[(i - 1)<0?0:i - 1];
+            previousTicket[i] = i - 1;
+            currentTicket[i] = rides[i];
           }
           //If week trip is cheapest buy it (but prefer longer trip if same price).
           else if (((weektrip)+cost[((i - 7)<0?0:(i - 7))]) < ((monthtrip)+cost[((i - 30)<0?0:(i - 30))])) {
             //Record week trip as cheapest
+            cost[i] = ((weektrip)+cost[((i - 7)<0?0:(i - 7))]);
+            if ((i - 7) < 0) {
+              i = 7;
+            }
+            previousTicket[i] = i - 7;
+            currentTicket[i] = 7;
           }
           else {
             //Record Month trip as cheapest
+            cost[i] = ((monthtrip)+cost[((i - 30)<0?0:(i - 30))]);
+            if ((i - 30) < 0) {
+              i = 30;
+            }
+            previousTicket[i] = i - 30;
+            currentTicket[i] = 30;
           }
           
           if(i == 365 && yeartrip <= cost[i]) {
             //Record Year trip as cheapest
+            cost[i] = yeartrip;
+            previousTicket[i] = 0;
+            currentTicket[i] = 365;
           }
-
-          //Output cheapest option
-          //$("#"+(i + offset)).addClass("day");
 
           /**
           Buy round trip tickets today: cost 3*w+C[100]
           Buy a 7 day ticket 7 days ago: cost x+C[101-7]
           Buy a 30 day ticket 30 days ago: cost y+C[101-30]
           **/
+        }
+
+        //Output cheapest options
+        if (currentTicket[365] == 365) {
+          for (i = 0; i <= 365; i++) {
+            $("#"+(i + offset)).addClass("year");
+          }
+        } else {
+          i = 365;
+          while (i >= 0) {
+            if (currentTicket[i] == 30) {
+              //Ensure that we don't purchase tickets in the past.
+              sanity = 0;
+              if (i - 29 < 0) {
+                sanity = Math.abs(i - 29);
+              }
+              for (j = 0; j < 30; j++) {
+                $("#"+(((i - j) + offset + sanity))).addClass("month");
+              }
+            } else if (currentTicket[i] == 7) {
+              //Ensure that we don't purchase tickets in the past.
+              sanity = 0;
+              if (i - 6 < 0) {
+                sanity = Math.abs(i - 6);
+              }
+              for (j = 0; j < 7; j++) {
+                $("#"+(((i - j) + offset + sanity))).addClass("week");
+              }
+            } else if (currentTicket[i] > 0) {
+              $("#"+(i + offset)).addClass("day");
+            }
+            if (i != previousTicket[i]) {
+              i = previousTicket[i];
+            } else {
+              i = -1;
+            }
+          }
         }
       }
       //Thank you https://stackoverflow.com/questions/563406/add-days-to-datetime
