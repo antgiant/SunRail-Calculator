@@ -65,7 +65,7 @@
             //Record week trip as cheapest
             cost[i] = ((weektrip)+cost[((i - 7)<0?0:(i - 7))]);
             if ((i - 7) < 0) {
-              i = 7;
+              i = 6;
             }
             previousTicket[i] = i - 7;
             currentTicket[i] = 7;
@@ -74,7 +74,7 @@
             //Record Month trip as cheapest
             cost[i] = ((monthtrip)+cost[((i - 30)<0?0:(i - 30))]);
             if ((i - 30) < 0) {
-              i = 30;
+              i = 29;
             }
             previousTicket[i] = i - 30;
             currentTicket[i] = 30;
