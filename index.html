@@ -63,21 +63,23 @@
           //If week trip is cheapest buy it (but prefer longer trip if same price).
           else if (((weektrip)+((i - 7)<0?0:cost[(i - 7)])) < ((monthtrip)+((i - 30)<0?0:cost[(i - 30)]))) {
             //Record week trip as cheapest
-            cost[i] = ((weektrip)+((i - 7)<0?0:cost[(i - 7)]));
             if ((i - 7) < 0) {
-              i = 6;
-              cost[i] = weektrip;
+              for (i = i; i < 6; i++) {
+                cost[i] = weektrip;
+              }
             }
+            cost[i] = ((weektrip)+((i - 7)<0?0:cost[(i - 7)]));
             previousTicket[i] = i - 7;
             currentTicket[i] = 7;
           }
           else {
             //Record Month trip as cheapest
-            cost[i] = ((monthtrip)+((i - 30)<0?0:cost[(i - 30)]));
             if ((i - 30) < 0) {
-              i = 29;
-              cost[i] = monthtrip;
+              for (i = i; i < 29; i++) {
+                cost[i] = monthtrip;
+              }
             }
+            cost[i] = ((monthtrip)+((i - 30)<0?0:cost[(i - 30)]));
             previousTicket[i] = i - 30;
             currentTicket[i] = 30;
           }
