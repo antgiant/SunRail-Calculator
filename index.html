@@ -97,10 +97,13 @@
         }
 
         //Output cheapest options
+        temp = [0,0,0,0];
+        
         if (currentTicket[365] == 365) {
           for (i = 0; i <= 365; i++) {
             $("#"+(i + offset)).addClass("year");
           }
+          temp[3] = 1;
         } else {
           i = 365;
           while (i >= 0) {
@@ -113,6 +116,8 @@
               for (j = 0; j < 30; j++) {
                 $("#"+(((i - j) + offset + sanity))).addClass("month");
               }
+              temp[2]++;
+
             } else if (currentTicket[i] == 7) {
               //Ensure that we don't purchase tickets in the past.
               sanity = 0;
@@ -122,8 +127,11 @@
               for (j = 0; j < 7; j++) {
                 $("#"+(((i - j) + offset + sanity))).addClass("week");
               }
+              temp[1]++;
             } else if (currentTicket[i] > 0) {
               $("#"+(i + offset)).addClass("day");
+              temp[0] += currentTicket[i];
+             
             }
             if (i != previousTicket[i]) {
               i = previousTicket[i];
@@ -132,6 +140,12 @@
             }
           }
         }
+        //Update the displayed cost
+        updateCost("day", temp[0]);
+        updateCost("week", temp[1]);
+        updateCost("month", temp[2]);
+        updateCost("year", temp[3]);
+
       }
       //Thank you https://stackoverflow.com/questions/563406/add-days-to-datetime
       Date.prototype.addDay = function()
@@ -195,29 +209,56 @@
           temp = temp.addDay();
         }
       }
-      function updateCost(where) {
+      function updateCost(where, number) {
         a = "";
         b = "";
+        c = "";
+        d = "";
+        
         switch(where) {
           case "day":
-            a = "#day-cost";
-            b = "#roundtrip";
+            a = "#roundtrip";
+            b = "#day-tickets";
+            c = "#day-cost";
+            d = "#day-total";
             break;
           case "week":
-            a = "#week-cost";
-            b = "#weeklytrip";
+            a = "#weeklytrip";
+            b = "#week-tickets";
+            c = "#week-cost";
+            d = "#week-total";
             break;
           case "month":
-            a = "#month-cost";
-            b = "#monthtrip";
+            a = "#monthtrip";
+            b = "#month-tickets";
+            c = "#month-cost";
+            d = "#month-total";
             break;
           case "year":
-            a = "#year-cost";
-            b = "#yeartrip";
+            a = "#yeartrip";
+            b = "#year-tickets";
+            c = "#year-cost";
+            d = "#year-total";
             break;
         }
-        $(a).text('$'+parseFloat($(b).val()).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-        $(b).val(parseFloat($(b).val()).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+        //Money format for cost
+        $(c).text('$'+parseFloat($(a).val()).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+        //Round the input value
+        $(a).val(parseFloat($(a).val()).toFixed(2));
+        
+        if (parseInt(number) >= 0) {
+          //Update ticket count to number
+          $(b).text(parseInt(number).toFixed(0));
+          //Update total cost of this ticket type
+          $(d).text('$'+parseFloat($(a).val()*parseInt(number)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+          
+          //Update the grand total cost of all ticket types
+          grandTotal = parseFloat($("#day-tickets").text()*parseFloat($("#roundtrip").val()));
+          grandTotal += parseFloat($("#week-tickets").text()*parseFloat($("#weeklytrip").val()));
+          grandTotal += parseFloat($("#month-tickets").text()*parseFloat($("#monthtrip").val()));
+          grandTotal += parseFloat($("#year-tickets").text()*parseFloat($("#yeartrip").val()));
+          $("#grand-total").text('$'+grandTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+        }
       }
     </script>
     <style>
