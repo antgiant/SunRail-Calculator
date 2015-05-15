@@ -4,9 +4,7 @@
     <title>SunRail Calculator</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="jquery.mobile-1.3.2.min.css" />
     <script src="jquery-1.9.1.min.js"></script>
-    <script src="jquery.mobile-1.3.2.min.js"></script>
     <script>
       //Setup global variables to hold various information.
       var offset = 0;
@@ -37,10 +35,10 @@
       }
       function calculateTickets() {
         //Get ticket prices
-        roundtrip = parseFloat($("#roundtrip").text());
-        weektrip = parseFloat($("#weeklytrip").text());
-        monthtrip = parseFloat($("#monthtrip").text());
-        yeartrip = parseFloat($("#yeartrip").text());
+        roundtrip = parseFloat($("#roundtrip").val());
+        weektrip = parseFloat($("#weeklytrip").val());
+        monthtrip = parseFloat($("#monthtrip").val());
+        yeartrip = parseFloat($("#yeartrip").val());
         
         //Remove previous ticket selections
         $("td").removeClass("day week month year");        
@@ -197,6 +195,30 @@
           temp = temp.addDay();
         }
       }
+      function updateCost(where) {
+        a = "";
+        b = "";
+        switch(where) {
+          case "day":
+            a = "#day-cost";
+            b = "#roundtrip";
+            break;
+          case "week":
+            a = "#week-cost";
+            b = "#weeklytrip";
+            break;
+          case "month":
+            a = "#month-cost";
+            b = "#monthtrip";
+            break;
+          case "year":
+            a = "#year-cost";
+            b = "#yeartrip";
+            break;
+        }
+        $(a).text('$'+parseFloat($(b).val()).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+        $(b).val(parseFloat($(b).val()).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+      }
     </script>
     <style>
       .day {
@@ -251,6 +273,10 @@
         display: block;
         margin: -1.5em 0 100%;
       }
+      button {
+        width: 56px;
+        height: 38px;
+      }
     </style>
   </head>
   <body>
@@ -260,24 +286,55 @@
       </div>
 
       <div data-role="content">
-
-        <div data-role="fieldcontain" class="day">
-          <label for="roundtrip">Round Trip Cost:</label>
-          <textarea cols="40" rows="8" name="roundtrip" id="roundtrip">3.58</textarea>
-        </div>
-        <div data-role="fieldcontain" class="week">
-          <label for="weeklytrip">Weekly Trip Cost:</label>
-          <textarea cols="40" rows="8" name="weeklytrip" id="weeklytrip">18.75</textarea>
-        </div>
-        <div data-role="fieldcontain" class="month">
-          <label for="monthtrip">Monthly Trip Cost:</label>
-          <textarea cols="40" rows="8" name="monthtrip" id="monthtrip">63.00</textarea>
-        </div>
-        <div data-role="fieldcontain" class="year">
-          <label for="yeartrip">Year Trip Cost:</label>
-          <textarea cols="40" rows="8" name="yeartrip" id="yeartrip">630.00</textarea>
-        </div>
-
+        <table>
+          <tr data-role="fieldcontain" class="day">
+            <td><label for="roundtrip">Round Trip Cost:</label></td>
+            <td><input name="roundtrip" id="roundtrip" size="6" onchange="updateCost('day')" value="3.58"></td>
+            <td>&nbsp;</td>
+            <td id="day-tickets">0</td>
+            <td>X</td>
+            <td id="day-cost">$3.58</td>
+            <td>=</td>
+            <td id="day-total">$0.00</td>
+          </tr>
+          <tr data-role="fieldcontain" class="week">
+            <td><label for="weeklytrip">Weekly Trip Cost:</label></td>
+            <td><input name="weeklytrip" id="weeklytrip" size="6" onchange="updateCost('week')"  value="18.75"></td>
+            <td>&nbsp;</td>
+            <td id="week-tickets">0</td>
+            <td>X</td>
+            <td id="week-cost">$18.75</td>
+            <td>=</td>
+            <td id="week-total">$0.00</td>
+          </tr>
+          <tr data-role="fieldcontain" class="month">
+            <td><label for="monthtrip">Monthly Trip Cost:</label></td>
+            <td><input name="monthtrip" id="monthtrip" size="6" onchange="updateCost('month')"  value="63.00"></td>
+            <td>&nbsp;</td>
+            <td id="month-tickets">0</td>
+            <td>X</td>
+            <td id="month-cost">$63.00</td>
+            <td>=</td>
+            <td id="month-total">$0.00</td>
+          </tr>
+          <tr data-role="fieldcontain" class="year">
+            <td><label for="yeartrip">Year Trip Cost:</label></td>
+            <td><input name="yeartrip" id="yeartrip" size="6" onchange="updateCost('year')"  value="630.00"></td>
+            <td>&nbsp;</td>
+            <td id="year-tickets">0</td>
+            <td>X</td>
+            <td id="year-cost">$630.00</td>
+            <td>=</td>
+            <td id="year-total">$0.00</td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td>&nbsp;</td>
+            <td colspan="3">Grand Total</td>
+            <td>=</td>
+            <td id="grand-total">$0.00</td>
+          </tr>
+        </table>
 
         <div data-role="fieldcontain">
           <fieldset data-role="controlgroup">
