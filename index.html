@@ -209,7 +209,7 @@
           temp = temp.addDay();
         }
       }
-      function updateCost(where, number) {
+      function updateCost(where, number, calculate) {
         a = "";
         b = "";
         c = "";
@@ -259,6 +259,8 @@
           grandTotal += parseFloat($("#year-tickets").text()*parseFloat($("#yeartrip").val()));
           $("#grand-total").text('$'+grandTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
         }
+        if (calculate)
+          calculateTickets();
       }
     </script>
     <style>
@@ -330,7 +332,7 @@
         <table>
           <tr data-role="fieldcontain" class="day">
             <td><label for="roundtrip">Round Trip Cost:</label></td>
-            <td><input name="roundtrip" id="roundtrip" size="6" onchange="updateCost('day')" value="3.58"></td>
+            <td><input name="roundtrip" id="roundtrip" size="6" onchange="updateCost('day', -1, true)" value="3.58"></td>
             <td>&nbsp;</td>
             <td id="day-tickets">0</td>
             <td>X</td>
@@ -340,7 +342,7 @@
           </tr>
           <tr data-role="fieldcontain" class="week">
             <td><label for="weeklytrip">Weekly Trip Cost:</label></td>
-            <td><input name="weeklytrip" id="weeklytrip" size="6" onchange="updateCost('week')"  value="18.75"></td>
+            <td><input name="weeklytrip" id="weeklytrip" size="6" onchange="updateCost('week', -1, true)"  value="18.75"></td>
             <td>&nbsp;</td>
             <td id="week-tickets">0</td>
             <td>X</td>
@@ -350,7 +352,7 @@
           </tr>
           <tr data-role="fieldcontain" class="month">
             <td><label for="monthtrip">Monthly Trip Cost:</label></td>
-            <td><input name="monthtrip" id="monthtrip" size="6" onchange="updateCost('month')"  value="63.00"></td>
+            <td><input name="monthtrip" id="monthtrip" size="6" onchange="updateCost('month', -1, true)"  value="63.00"></td>
             <td>&nbsp;</td>
             <td id="month-tickets">0</td>
             <td>X</td>
@@ -360,7 +362,7 @@
           </tr>
           <tr data-role="fieldcontain" class="year">
             <td><label for="yeartrip">Year Trip Cost:</label></td>
-            <td><input name="yeartrip" id="yeartrip" size="6" onchange="updateCost('year')"  value="630.00"></td>
+            <td><input name="yeartrip" id="yeartrip" size="6" onchange="updateCost('year', -1, true)"  value="630.00"></td>
             <td>&nbsp;</td>
             <td id="year-tickets">0</td>
             <td>X</td>
