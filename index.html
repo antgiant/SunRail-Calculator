@@ -263,10 +263,68 @@
           grandTotal += parseFloat($("#week-tickets").text()*parseFloat($("#weeklytrip").val()));
           grandTotal += parseFloat($("#month-tickets").text()*parseFloat($("#monthtrip").val()));
           grandTotal += parseFloat($("#year-tickets").text()*parseFloat($("#yeartrip").val()));
+          grandTotal += parseFloat($("#reloadable-pass").text());
           $("#grand-total").text('$'+grandTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
         }
         if (calculate)
           calculateTickets();
+      }
+      function updateTicketCost() {
+        //Constants to help understanding
+        var NORMAL = 1;
+        var REDUCED = 0;
+        var ONE_WAY = 0;
+        var ROUND_TRIP = 1;
+        var WEEK_PASS = 2;
+        var MONTH_PASS = 3;
+        var YEAR_PASS = 4;
+          //Default Ticket Costs
+          //3d array.
+          //  First Position = Ticket Type
+          //  Second Position = Normal or Reduced
+          //  Third Position = Counties Traveled
+            var ticketPrices = new Array();
+            ticketPrices[ONE_WAY][NORMAL][1] = '2.00';
+            ticketPrices[ONE_WAY][NORMAL][2] = '3.00';
+            ticketPrices[ONE_WAY][NORMAL][3] = '4.00';
+            ticketPrices[ONE_WAY][REDUCED][1] = '1.00';
+            ticketPrices[ONE_WAY][REDUCED][2] = '1.50';
+            ticketPrices[ONE_WAY][REDUCED][3] = '2.00';
+            ticketPrices[ROUND_TRIP][NORMAL][1] = '3.75';
+            ticketPrices[ROUND_TRIP][NORMAL][2] = '5.50';
+            ticketPrices[ROUND_TRIP][NORMAL][3] = '7.50';
+            ticketPrices[ROUND_TRIP][REDUCED][1] = '1.75';
+            ticketPrices[ROUND_TRIP][REDUCED][2] = '2.75';
+            ticketPrices[ROUND_TRIP][REDUCED][3] = '3.75';
+            ticketPrices[WEEK_PASS][NORMAL][1] = '17.00';
+            ticketPrices[WEEK_PASS][NORMAL][2] = '25.00';
+            ticketPrices[WEEK_PASS][NORMAL][3] = '34.00';
+            ticketPrices[WEEK_PASS][REDUCED][1] = '8.50';
+            ticketPrices[WEEK_PASS][REDUCED][2] = '12.50';
+            ticketPrices[WEEK_PASS][REDUCED][3] = '17.00';
+            ticketPrices[MONTH_PASS][NORMAL][1] = '56.00';
+            ticketPrices[MONTH_PASS][NORMAL][2] = '84.00';
+            ticketPrices[MONTH_PASS][NORMAL][3] = '112.00';
+            ticketPrices[MONTH_PASS][REDUCED][1] = '28.00';
+            ticketPrices[MONTH_PASS][REDUCED][2] = '42.00';
+            ticketPrices[MONTH_PASS][REDUCED][3] = '56.00';
+            ticketPrices[YEAR_PASS][NORMAL][1] = '560.00';
+            ticketPrices[YEAR_PASS][NORMAL][2] = '840.00';
+            ticketPrices[YEAR_PASS][NORMAL][3] = '1120.00';
+            ticketPrices[YEAR_PASS][REDUCED][1] = '280.00';
+            ticketPrices[YEAR_PASS][REDUCED][2] = '420.00';
+            ticketPrices[YEAR_PASS][REDUCED][3] = '560.00';
+  
+          //Determine Ticket costs
+          
+          
+          //Update the grand total cost of all ticket types
+          grandTotal = parseFloat($("#day-tickets").text()*parseFloat($("#roundtrip").val()));
+          grandTotal += parseFloat($("#week-tickets").text()*parseFloat($("#weeklytrip").val()));
+          grandTotal += parseFloat($("#month-tickets").text()*parseFloat($("#monthtrip").val()));
+          grandTotal += parseFloat($("#year-tickets").text()*parseFloat($("#yeartrip").val()));
+          grandTotal += parseFloat($("#reloadable-pass").text());
+          //$("#grand-total").text('$'+grandTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
       }
     </script>
     <style>
@@ -381,12 +439,15 @@
               <input type="radio" id="tickettype" name="tickettype" value="reloadandbuy" />No, but I will buy one<br>
               <input type="radio" id="tickettype" name="tickettype" value="reload" checked="checked"/>Yes<br>
             <br>
-            <label for="ratetype">Are you buying through your Employer (Corporate Ticket Program)? (This saves you some income taxes.)<br></label>
-              <input type="radio" id="employeetype" name="employeetype" value="normal" />No<br>
-              <input type="radio" id="employeetype" name="employeetype" value="taxfree" checked="checked"/>Yes<br>
+            <label for="ratediscount">If you get a rate discount, what percent is it? <br>
+            (Note: Enter your tax bracket percentage to estimate the savings of utilizing the Corporate Ticket Program)<br></label>
+              <input type="text" id="ratediscount" name="ratediscount" value="0" size="2" />%<br>
             <br>
             <p>
-              These options and prices are accurate as of 5/27/2015
+              These options and prices are accurate as of 6/8/2015<br>
+              <br>
+              NOTE: You can save on taxes (Up to $600/Year) by utilizing the Corporate Ticket Program if available. However, that does
+              not reduce the initial out of pocket expenses and is thus ignored in these calculations.
             </p>
           </div>
         <h3>Trip Planning</h3>
@@ -431,6 +492,13 @@
               <td id="year-cost">$630.00</td>
               <td>=</td>
               <td id="year-total">$0.00</td>
+            </tr>
+            <tr>
+              <td colspan="2"></td>
+              <td>&nbsp;</td>
+              <td colspan="3">Reloadable Sunpass</td>
+              <td>=</td>
+              <td id="reloadable-pass">$0.00</td>
             </tr>
             <tr>
               <td colspan="2"></td>
