@@ -263,7 +263,7 @@
           grandTotal += parseFloat($("#week-tickets").text()*parseFloat($("#weeklytrip").val()));
           grandTotal += parseFloat($("#month-tickets").text()*parseFloat($("#monthtrip").val()));
           grandTotal += parseFloat($("#year-tickets").text()*parseFloat($("#yeartrip").val()));
-          grandTotal += parseFloat($("#reloadable-pass").text());
+          grandTotal += parseFloat($("#reloadable-pass").text().substring(1));
           $("#grand-total").text('$'+grandTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
         }
         if (calculate)
@@ -283,7 +283,7 @@
           //  First Position = Ticket Type
           //  Second Position = Normal or Reduced
           //  Third Position = Counties Traveled
-            var ticketPrices = new Array();
+            var ticketPrices = [[[[],[],[],[]],[[],[],[],[]]],[[[],[],[],[]],[[],[],[],[]]],[[[],[],[],[]],[[],[],[],[]]],[[[],[],[],[]],[[],[],[],[]]],[[[],[],[],[]],[[],[],[],[]]]];
             ticketPrices[ONE_WAY][NORMAL][1] = '2.00';
             ticketPrices[ONE_WAY][NORMAL][2] = '3.00';
             ticketPrices[ONE_WAY][NORMAL][3] = '4.00';
@@ -314,17 +314,28 @@
             ticketPrices[YEAR_PASS][REDUCED][1] = '280.00';
             ticketPrices[YEAR_PASS][REDUCED][2] = '420.00';
             ticketPrices[YEAR_PASS][REDUCED][3] = '560.00';
-          var passPrice = '5.00';
           //Determine Ticket costs
+          reloadablePass = ($("input:radio[name=tickettype]:checked").val() == "reloadandbuy"?5.00:0.00);
+          $("#reloadable-pass").text('$'+reloadablePass.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+          var rateKind = ($("input:radio[name=ratetype]:checked").val() == "reduced"?REDUCED:NORMAL);
+          var dist = Math.abs(parseInt($("input:radio[name=countiesend]:checked").val()) - parseInt($("input:radio[name=countiesstart]:checked").val())) + 1;
+          if (parseFloat($("#ratediscount").val())<0 || parseFloat($("#ratediscount").val()) > 100) {
+            $("#ratediscount").val("0");
+          }
+          var discount = 1.0 - (parseFloat($("#ratediscount").val())/100 + ($("input:radio[name=tickettype]:checked").val() != "normal"?.1:0));
+          var lesserDiscount = 1.0 - (parseFloat($("#ratediscount").val())/100);
           
           
           //Update the grand total cost of all ticket types
-          grandTotal = parseFloat($("#day-tickets").text()*parseFloat($("#roundtrip").val()));
-          grandTotal += parseFloat($("#week-tickets").text()*parseFloat($("#weeklytrip").val()));
-          grandTotal += parseFloat($("#month-tickets").text()*parseFloat($("#monthtrip").val()));
-          grandTotal += parseFloat($("#year-tickets").text()*parseFloat($("#yeartrip").val()));
-          grandTotal += parseFloat($("#reloadable-pass").text());
-          //$("#grand-total").text('$'+grandTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+          $("#roundtrip").val(ticketPrices[ROUND_TRIP][rateKind][dist]*discount);
+          updateCost('day', -1, false);
+          $("#weeklytrip").val(ticketPrices[WEEK_PASS][rateKind][dist]*lesserDiscount);
+          updateCost('week', -1, false);
+          $("#monthtrip").val(ticketPrices[MONTH_PASS][rateKind][dist]*lesserDiscount);
+          updateCost('month', -1, false);
+          $("#yeartrip").val(ticketPrices[YEAR_PASS][rateKind][dist]*lesserDiscount);
+          updateCost('year', -1, true);
+         
       }
     </script>
     <style>
@@ -396,8 +407,8 @@
         <h3>Ticket Cost</h3>
           <div>
             <label for="ratetype">What is your rate type?<br></label>
-              <input type="radio" id="ratetype" name="ratetype" value="normal" checked="checked"/>Adult (18-64)<br>
-              <input type="radio" id="ratetype" name="ratetype" value="reduced" />Disabled, Senior (65+), or Student (7-17)<br>
+              <input type="radio" name="ratetype" onchange="updateTicketCost()" value="normal" checked="checked"/>Adult (18-64)<br>
+              <input type="radio" name="ratetype" onchange="updateTicketCost()" value="reduced" />Disabled, Senior (65+), or Student (7-17)<br>
             <br>
             <table>
               <tr>
@@ -410,83 +421,84 @@
               </tr>
               <tr>
                 <td>
-                  <input type="radio" id="countiesstart" name="countiesstart" value="1" />Debary
+                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="1" />Debary
                 </td>
                 <td>
-                  <input type="radio" id="countiesend" name="countiesend" value="1" />Debary
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="radio" id="countiesstart" name="countiesstart" value="2" checked="checked"/>Sanford, Lake Mary, Longwood, or Altamonte Springs
-                </td>
-                <td>
-                  <input type="radio" id="countiesend" name="countiesend" value="2" />Sanford, Lake Mary, Longwood, or Altamonte Springs
+                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="1" />Debary
                 </td>
               </tr>
               <tr>
                 <td>
-                  <input type="radio" id="countiesstart" name="countiesstart" value="3" />Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, or Sand Lake Road
+                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="2" checked="checked"/>Sanford, Lake Mary, Longwood, or Altamonte Springs
                 </td>
                 <td>
-                  <input type="radio" id="countiesend" name="countiesend" value="3" checked="checked"/>Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, or Sand Lake Road
+                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="2" />Sanford, Lake Mary, Longwood, or Altamonte Springs
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="3" />Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, or Sand Lake Road
+                </td>
+                <td>
+                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="3" checked="checked"/>Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, or Sand Lake Road
                 </td>
               </tr>
             </table>
             <br>
-            <label for="ratetype">Do you have a reloadable SunCard? (Gives 10% off)<br></label>
-              <input type="radio" id="tickettype" name="tickettype" value="normal" checked="checked" />No<br>
-              <input type="radio" id="tickettype" name="tickettype" value="reloadandbuy" />No, but I will buy one<br>
-              <input type="radio" id="tickettype" name="tickettype" value="reload" />Yes<br>
+            <label for="tickettype">Do you have a reloadable SunCard? (Gives 10% off)<br></label>
+              <input type="radio" name="tickettype" onchange="updateTicketCost()" value="normal" checked="checked" />No<br>
+              <input type="radio" name="tickettype" onchange="updateTicketCost()" value="reloadandbuy" />No, but I will buy one<br>
+              <input type="radio" name="tickettype" onchange="updateTicketCost()" value="reload" />Yes<br>
             <br>
             <label for="ratediscount">If you get a rate discount, what percent is it? <br>
             (Note: Enter your tax bracket percentage to estimate the savings of utilizing the Corporate Ticket Program)<br></label>
-              <input type="text" id="ratediscount" name="ratediscount" value="0" size="2" />%<br>
+              <input type="text" id="ratediscount" name="ratediscount" onchange="updateTicketCost()" value="0" size="2" />%<br>
             <br>
             <p>
               These options and prices are accurate as of 6/8/2015
             </p>
+            <button onclick="$( '#accordion' ).accordion({active: 1});">Done&nbsp;</button>
           </div>
         <h3>Trip Planning</h3>
         <div>
           <table>
             <tr data-role="fieldcontain" class="day">
               <td><label for="roundtrip">Round Trip Cost:</label></td>
-              <td><input name="roundtrip" id="roundtrip" size="6" onchange="updateCost('day', -1, true)" value="3.58"></td>
+              <td><input name="roundtrip" id="roundtrip" size="6" onchange="updateCost('day', -1, true)" value="5.50"></td>
               <td>&nbsp;</td>
               <td id="day-tickets">0</td>
               <td>X</td>
-              <td id="day-cost">$3.58</td>
+              <td id="day-cost">$5.50</td>
               <td>=</td>
               <td id="day-total">$0.00</td>
             </tr>
             <tr data-role="fieldcontain" class="week">
               <td><label for="weeklytrip">Weekly Trip Cost:</label></td>
-              <td><input name="weeklytrip" id="weeklytrip" size="6" onchange="updateCost('week', -1, true)"  value="18.75"></td>
+              <td><input name="weeklytrip" id="weeklytrip" size="6" onchange="updateCost('week', -1, true)"  value="25.00"></td>
               <td>&nbsp;</td>
               <td id="week-tickets">0</td>
               <td>X</td>
-              <td id="week-cost">$18.75</td>
+              <td id="week-cost">$25.00</td>
               <td>=</td>
               <td id="week-total">$0.00</td>
             </tr>
             <tr data-role="fieldcontain" class="month">
               <td><label for="monthtrip">Monthly Trip Cost:</label></td>
-              <td><input name="monthtrip" id="monthtrip" size="6" onchange="updateCost('month', -1, true)"  value="63.00"></td>
+              <td><input name="monthtrip" id="monthtrip" size="6" onchange="updateCost('month', -1, true)"  value="84.00"></td>
               <td>&nbsp;</td>
               <td id="month-tickets">0</td>
               <td>X</td>
-              <td id="month-cost">$63.00</td>
+              <td id="month-cost">$84.00</td>
               <td>=</td>
               <td id="month-total">$0.00</td>
             </tr>
             <tr data-role="fieldcontain" class="year">
               <td><label for="yeartrip">Year Trip Cost:</label></td>
-              <td><input name="yeartrip" id="yeartrip" size="6" onchange="updateCost('year', -1, true)"  value="630.00"></td>
+              <td><input name="yeartrip" id="yeartrip" size="6" onchange="updateCost('year', -1, true)"  value="840.00"></td>
               <td>&nbsp;</td>
               <td id="year-tickets">0</td>
               <td>X</td>
-              <td id="year-cost">$630.00</td>
+              <td id="year-cost">$840.00</td>
               <td>=</td>
               <td id="year-total">$0.00</td>
             </tr>
