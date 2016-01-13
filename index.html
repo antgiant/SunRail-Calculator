@@ -35,6 +35,24 @@
           calculateTickets();
         }
       }
+	  function incrementWeeks(day) {
+		i = day + 1;
+		while (i <= 366 + offset) {
+			if (i >= offset) {
+				increment(i);
+			}
+			i += 7;
+		}
+      }
+      function decrementWeeks(day) {
+		i = day + 1;
+		while (i <= 366 + offset) {
+			if (i >= offset) {
+				decrement(i);
+			}
+			i += 7;
+		}
+      }
       function calculateTickets() {
         //Get ticket prices
         roundtrip = parseFloat($("#roundtrip").val());
@@ -531,7 +549,37 @@
             <fieldset data-role="controlgroup">
               <legend>Choose the the number of round trips per day you plan to ride:</legend>
               <table id='calendar'>
-                <tr><th></th><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+                <tr>
+					<th></th>
+					<th><button onclick="incrementWeeks(0)">&#9650;</button><br>
+						Sun<br>
+						<button onclick="decrementWeeks(0)">&#9660;</button>
+					</th>
+					<th><button onclick="incrementWeeks(1)">&#9650;</button><br>
+						Mon<br>
+						<button onclick="decrementWeeks(1)">&#9660;</button>
+					</th>
+					<th><button onclick="incrementWeeks(2)">&#9650;</button><br>
+						Tue<br>
+						<button onclick="decrementWeeks(2)">&#9660;</button>
+					</th>
+					<th><button onclick="incrementWeeks(3)">&#9650;</button><br>
+						Wed<br>
+						<button onclick="decrementWeeks(3)">&#9660;</button>
+					</th>
+					<th><button onclick="incrementWeeks(4)">&#9650;</button><br>
+						Thu<br>
+						<button onclick="decrementWeeks(4)">&#9660;</button>
+					</th>
+					<th><button onclick="incrementWeeks(5)">&#9650;</button><br>
+						Fri<br>
+						<button onclick="decrementWeeks(5)">&#9660;</button>
+					</th>
+					<th><button onclick="incrementWeeks(6)">&#9650;</button><br>
+						Sat<br>
+						<button onclick="decrementWeeks(6)">&#9660;</button>
+					</th>
+				</tr>
                 <tr>
                   <td id="week1"></td>
                   <td id="1"><br>
