@@ -36,6 +36,24 @@
           calculateTickets();
         }
       }
+	  function incrementWeeks(day) {
+		i = day + 1;
+		while (i <= 366 + offset) {
+			if (i >= offset) {
+				increment(i);
+			}
+			i += 7;
+		}
+      }
+      function decrementWeeks(day) {
+		i = day + 1;
+		while (i <= 366 + offset) {
+			if (i >= offset) {
+				decrement(i);
+			}
+			i += 7;
+		}
+      }
       function calculateTickets() {
         //Get ticket prices
         roundtrip = parseFloat($("#roundtrip").val());
@@ -226,30 +244,24 @@
           case "day":
             a = "#roundtrip";
             b = "#day-tickets";
-            c = "#day-cost";
             d = "#day-total";
             break;
           case "week":
             a = "#weeklytrip";
             b = "#week-tickets";
-            c = "#week-cost";
             d = "#week-total";
             break;
           case "month":
             a = "#monthtrip";
             b = "#month-tickets";
-            c = "#month-cost";
             d = "#month-total";
             break;
           case "year":
             a = "#yeartrip";
             b = "#year-tickets";
-            c = "#year-cost";
             d = "#year-total";
             break;
         }
-        //Money format for cost
-        $(c).text('$'+parseFloat($(a).val()).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
         //Round the input value
         $(a).val(parseFloat($(a).val()).toFixed(2));
         
@@ -345,6 +357,20 @@
       }
     </script>
     <style>
+	 @media (max-width: 600px) {
+		.ui-accordion-content {
+			padding: 0 !important;
+		}
+		button {
+			width: 38px !important;
+		}
+		fieldset {
+			padding: 0;
+		}
+		body {
+			margin: 0;
+		}
+	 }
       .day {
         background-color: yellow;
       }
@@ -387,7 +413,7 @@
         display: inline-block;
         white-space: nowrap;
         line-height: 1.5;
-        transform: translate(0, 100%) rotate(-90deg);
+        transform: translate(1.5em, 0%) rotate(90deg);
         transform-origin: 0 0;
       }
       /* This element stretches the parent to be square
@@ -481,53 +507,43 @@
             <tr data-role="fieldcontain" class="day">
               <td><label for="roundtrip">Round Trip Cost:</label></td>
               <td><input name="roundtrip" id="roundtrip" size="6" onchange="updateCost('day', -1, true)" value="5.50"></td>
-              <td>&nbsp;</td>
-              <td id="day-tickets">0</td>
               <td>X</td>
-              <td id="day-cost">$5.50</td>
+              <td id="day-tickets">0</td>
               <td>=</td>
               <td id="day-total">$0.00</td>
             </tr>
             <tr data-role="fieldcontain" class="week">
               <td><label for="weeklytrip">Weekly Trip Cost:</label></td>
               <td><input name="weeklytrip" id="weeklytrip" size="6" onchange="updateCost('week', -1, true)"  value="25.00"></td>
-              <td>&nbsp;</td>
-              <td id="week-tickets">0</td>
               <td>X</td>
-              <td id="week-cost">$25.00</td>
+              <td id="week-tickets">0</td>
               <td>=</td>
               <td id="week-total">$0.00</td>
             </tr>
             <tr data-role="fieldcontain" class="month">
               <td><label for="monthtrip">Monthly Trip Cost:</label></td>
               <td><input name="monthtrip" id="monthtrip" size="6" onchange="updateCost('month', -1, true)"  value="84.00"></td>
-              <td>&nbsp;</td>
-              <td id="month-tickets">0</td>
               <td>X</td>
-              <td id="month-cost">$84.00</td>
+              <td id="month-tickets">0</td>
               <td>=</td>
               <td id="month-total">$0.00</td>
             </tr>
             <tr data-role="fieldcontain" class="year">
               <td><label for="yeartrip">Year Trip Cost:</label></td>
               <td><input name="yeartrip" id="yeartrip" size="6" onchange="updateCost('year', -1, true)"  value="840.00"></td>
-              <td>&nbsp;</td>
-              <td id="year-tickets">0</td>
               <td>X</td>
-              <td id="year-cost">$840.00</td>
+              <td id="year-tickets">0</td>
               <td>=</td>
               <td id="year-total">$0.00</td>
             </tr>
             <tr>
-              <td colspan="2"></td>
-              <td>&nbsp;</td>
+              <td></td>
               <td colspan="3">Reloadable Sunpass</td>
               <td>=</td>
               <td id="reloadable-pass">$0.00</td>
             </tr>
             <tr>
-              <td colspan="2"></td>
-              <td>&nbsp;</td>
+              <td></td>
               <td colspan="3">Grand Total</td>
               <td>=</td>
               <td id="grand-total">$0.00</td>
@@ -537,9 +553,38 @@
             <fieldset data-role="controlgroup">
               <legend>Choose the the number of round trips per day you plan to ride:</legend>
               <table id='calendar'>
-                <tr><th></th><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
                 <tr>
-                  <td id="week1"></td>
+					<th><button onclick="incrementWeeks(0)">&#9650;</button><br>
+						Sun<br>
+						<button onclick="decrementWeeks(0)">&#9660;</button>
+					</th>
+					<th><button onclick="incrementWeeks(1)">&#9650;</button><br>
+						Mon<br>
+						<button onclick="decrementWeeks(1)">&#9660;</button>
+					</th>
+					<th><button onclick="incrementWeeks(2)">&#9650;</button><br>
+						Tue<br>
+						<button onclick="decrementWeeks(2)">&#9660;</button>
+					</th>
+					<th><button onclick="incrementWeeks(3)">&#9650;</button><br>
+						Wed<br>
+						<button onclick="decrementWeeks(3)">&#9660;</button>
+					</th>
+					<th><button onclick="incrementWeeks(4)">&#9650;</button><br>
+						Thu<br>
+						<button onclick="decrementWeeks(4)">&#9660;</button>
+					</th>
+					<th><button onclick="incrementWeeks(5)">&#9650;</button><br>
+						Fri<br>
+						<button onclick="decrementWeeks(5)">&#9660;</button>
+					</th>
+					<th><button onclick="incrementWeeks(6)">&#9650;</button><br>
+						Sat<br>
+						<button onclick="decrementWeeks(6)">&#9660;</button>
+					</th>
+					<th></th>
+				</tr>
+                <tr>
                   <td id="1"><br>
                     <span class="date">1</span><br>
                     <button onclick="increment(1)">&#9650;</button>
@@ -589,9 +634,9 @@
                     <button onclick="decrement(7)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week1"></td>
                 </tr>
                 <tr>
-                  <td id="week2"></td>
                   <td id="8"><span class="date">8</span><br>
                     <button onclick="increment(8)">&#9650;</button>
                     <span class="value">0</span>
@@ -634,9 +679,9 @@
                     <button onclick="decrement(14)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week2"></td>
                 </tr>
                 <tr>
-                  <td id="week3"></td>
                   <td id="15"><span class="date">15</span><br>
                     <button onclick="increment(15)">&#9650;</button>
                     <span class="value">0</span>
@@ -679,9 +724,9 @@
                     <button onclick="decrement(21)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week3"></td>
                 </tr>
                 <tr>
-                  <td id="week4"></td>
                   <td id="22"><span class="date">22</span><br>
                     <button onclick="increment(22)">&#9650;</button>
                     <span class="value">0</span>
@@ -724,9 +769,9 @@
                     <button onclick="decrement(28)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week4"></td>
                 </tr>
                 <tr>
-                  <td id="week5"></td>
                   <td id="29"><span class="date">29</span><br>
                     <button onclick="increment(29)">&#9650;</button>
                     <span class="value">0</span>
@@ -769,9 +814,9 @@
                     <button onclick="decrement(35)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week5"></td>
                 </tr>
                 <tr>
-                  <td id="week6"></td>
                   <td id="36"><span class="date">36</span><br>
                     <button onclick="increment(36)">&#9650;</button>
                     <span class="value">0</span>
@@ -814,9 +859,9 @@
                     <button onclick="decrement(42)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week6"></td>
                 </tr>
                 <tr>
-                  <td id="week7"></td>
                   <td id="43"><span class="date">43</span><br>
                     <button onclick="increment(43)">&#9650;</button>
                     <span class="value">0</span>
@@ -859,9 +904,9 @@
                     <button onclick="decrement(49)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week7"></td>
                 </tr>
                 <tr>
-                  <td id="week8"></td>
                   <td id="50"><span class="date">50</span><br>
                     <button onclick="increment(50)">&#9650;</button>
                     <span class="value">0</span>
@@ -904,9 +949,9 @@
                     <button onclick="decrement(56)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week8"></td>
                 </tr>
                 <tr>
-                  <td id="week9"></td>
                   <td id="57"><span class="date">57</span><br>
                     <button onclick="increment(57)">&#9650;</button>
                     <span class="value">0</span>
@@ -949,9 +994,9 @@
                     <button onclick="decrement(63)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week9"></td>
                 </tr>
                 <tr>
-                  <td id="week10"></td>
                   <td id="64"><span class="date">64</span><br>
                     <button onclick="increment(64)">&#9650;</button>
                     <span class="value">0</span>
@@ -994,9 +1039,9 @@
                     <button onclick="decrement(70)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week10"></td>
                 </tr>
                 <tr>
-                  <td id="week11"></td>
                   <td id="71"><span class="date">71</span><br>
                     <button onclick="increment(71)">&#9650;</button>
                     <span class="value">0</span>
@@ -1039,9 +1084,9 @@
                     <button onclick="decrement(77)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week11"></td>
                 </tr>
                 <tr>
-                  <td id="week12"></td>
                   <td id="78"><span class="date">78</span><br>
                     <button onclick="increment(78)">&#9650;</button>
                     <span class="value">0</span>
@@ -1084,9 +1129,9 @@
                     <button onclick="decrement(84)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week12"></td>
                 </tr>
                 <tr>
-                  <td id="week13"></td>
                   <td id="85"><span class="date">85</span><br>
                     <button onclick="increment(85)">&#9650;</button>
                     <span class="value">0</span>
@@ -1129,9 +1174,9 @@
                     <button onclick="decrement(91)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week13"></td>
                 </tr>
                 <tr>
-                  <td id="week14"></td>
                   <td id="92"><span class="date">92</span><br>
                     <button onclick="increment(92)">&#9650;</button>
                     <span class="value">0</span>
@@ -1174,9 +1219,9 @@
                     <button onclick="decrement(98)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week14"></td>
                 </tr>
                 <tr>
-                  <td id="week15"></td>
                   <td id="99"><span class="date">99</span><br>
                     <button onclick="increment(99)">&#9650;</button>
                     <span class="value">0</span>
@@ -1219,9 +1264,9 @@
                     <button onclick="decrement(105)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week15"></td>
                 </tr>
                 <tr>
-                  <td id="week16"></td>
                   <td id="106"><span class="date">106</span><br>
                     <button onclick="increment(106)">&#9650;</button>
                     <span class="value">0</span>
@@ -1264,9 +1309,9 @@
                     <button onclick="decrement(112)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week16"></td>
                 </tr>
                 <tr>
-                  <td id="week17"></td>
                   <td id="113"><span class="date">113</span><br>
                     <button onclick="increment(113)">&#9650;</button>
                     <span class="value">0</span>
@@ -1309,9 +1354,9 @@
                     <button onclick="decrement(119)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week17"></td>
                 </tr>
                 <tr>
-                  <td id="week18"></td>
                   <td id="120"><span class="date">120</span><br>
                     <button onclick="increment(120)">&#9650;</button>
                     <span class="value">0</span>
@@ -1354,9 +1399,9 @@
                     <button onclick="decrement(126)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week18"></td>
                 </tr>
                 <tr>
-                  <td id="week19"></td>
                   <td id="127"><span class="date">127</span><br>
                     <button onclick="increment(127)">&#9650;</button>
                     <span class="value">0</span>
@@ -1399,9 +1444,9 @@
                     <button onclick="decrement(133)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week19"></td>
                 </tr>
                 <tr>
-                  <td id="week20"></td>
                   <td id="134"><span class="date">134</span><br>
                     <button onclick="increment(134)">&#9650;</button>
                     <span class="value">0</span>
@@ -1444,9 +1489,9 @@
                     <button onclick="decrement(140)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week20"></td>
                 </tr>
                 <tr>
-                  <td id="week21"></td>
                   <td id="141"><span class="date">141</span><br>
                     <button onclick="increment(141)">&#9650;</button>
                     <span class="value">0</span>
@@ -1489,9 +1534,9 @@
                     <button onclick="decrement(147)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week21"></td>
                 </tr>
                 <tr>
-                  <td id="week22"></td>
                   <td id="148"><span class="date">148</span><br>
                     <button onclick="increment(148)">&#9650;</button>
                     <span class="value">0</span>
@@ -1534,9 +1579,9 @@
                     <button onclick="decrement(154)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week22"></td>
                 </tr>
                 <tr>
-                  <td id="week23"></td>
                   <td id="155"><span class="date">155</span><br>
                     <button onclick="increment(155)">&#9650;</button>
                     <span class="value">0</span>
@@ -1579,9 +1624,9 @@
                     <button onclick="decrement(161)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week23"></td>
                 </tr>
                 <tr>
-                  <td id="week24"></td>
                   <td id="162"><span class="date">162</span><br>
                     <button onclick="increment(162)">&#9650;</button>
                     <span class="value">0</span>
@@ -1624,9 +1669,9 @@
                     <button onclick="decrement(168)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week24"></td>
                 </tr>
                 <tr>
-                  <td id="week25"></td>
                   <td id="169"><span class="date">169</span><br>
                     <button onclick="increment(169)">&#9650;</button>
                     <span class="value">0</span>
@@ -1669,9 +1714,9 @@
                     <button onclick="decrement(175)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week25"></td>
                 </tr>
                 <tr>
-                  <td id="week26"></td>
                   <td id="176"><span class="date">176</span><br>
                     <button onclick="increment(176)">&#9650;</button>
                     <span class="value">0</span>
@@ -1714,9 +1759,9 @@
                     <button onclick="decrement(182)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week26"></td>
                 </tr>
                 <tr>
-                  <td id="week27"></td>
                   <td id="183"><span class="date">183</span><br>
                     <button onclick="increment(183)">&#9650;</button>
                     <span class="value">0</span>
@@ -1759,9 +1804,9 @@
                     <button onclick="decrement(189)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week27"></td>
                 </tr>
                 <tr>
-                  <td id="week28"></td>
                   <td id="190"><span class="date">190</span><br>
                     <button onclick="increment(190)">&#9650;</button>
                     <span class="value">0</span>
@@ -1804,9 +1849,9 @@
                     <button onclick="decrement(196)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week28"></td>
                 </tr>
                 <tr>
-                  <td id="week29"></td>
                   <td id="197"><span class="date">197</span><br>
                     <button onclick="increment(197)">&#9650;</button>
                     <span class="value">0</span>
@@ -1849,9 +1894,9 @@
                     <button onclick="decrement(203)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week29"></td>
                 </tr>
                 <tr>
-                  <td id="week30"></td>
                   <td id="204"><span class="date">204</span><br>
                     <button onclick="increment(204)">&#9650;</button>
                     <span class="value">0</span>
@@ -1894,9 +1939,9 @@
                     <button onclick="decrement(210)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week30"></td>
                 </tr>
                 <tr>
-                  <td id="week31"></td>
                   <td id="211"><span class="date">211</span><br>
                     <button onclick="increment(211)">&#9650;</button>
                     <span class="value">0</span>
@@ -1939,9 +1984,9 @@
                     <button onclick="decrement(217)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week31"></td>
                 </tr>
                 <tr>
-                  <td id="week32"></td>
                   <td id="218"><span class="date">218</span><br>
                     <button onclick="increment(218)">&#9650;</button>
                     <span class="value">0</span>
@@ -1984,9 +2029,9 @@
                     <button onclick="decrement(224)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week32"></td>
                 </tr>
                 <tr>
-                  <td id="week33"></td>
                   <td id="225"><span class="date">225</span><br>
                     <button onclick="increment(225)">&#9650;</button>
                     <span class="value">0</span>
@@ -2029,9 +2074,9 @@
                     <button onclick="decrement(231)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week33"></td>
                 </tr>
                 <tr>
-                  <td id="week34"></td>
                   <td id="232"><span class="date">232</span><br>
                     <button onclick="increment(232)">&#9650;</button>
                     <span class="value">0</span>
@@ -2074,9 +2119,9 @@
                     <button onclick="decrement(238)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week34"></td>
                 </tr>
                 <tr>
-                  <td id="week35"></td>
                   <td id="239"><span class="date">239</span><br>
                     <button onclick="increment(239)">&#9650;</button>
                     <span class="value">0</span>
@@ -2119,9 +2164,9 @@
                     <button onclick="decrement(245)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week35"></td>
                 </tr>
                 <tr>
-                  <td id="week36"></td>
                   <td id="246"><span class="date">246</span><br>
                     <button onclick="increment(246)">&#9650;</button>
                     <span class="value">0</span>
@@ -2164,9 +2209,9 @@
                     <button onclick="decrement(252)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week36"></td>
                 </tr>
                 <tr>
-                  <td id="week37"></td>
                   <td id="253"><span class="date">253</span><br>
                     <button onclick="increment(253)">&#9650;</button>
                     <span class="value">0</span>
@@ -2209,9 +2254,9 @@
                     <button onclick="decrement(259)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week37"></td>
                 </tr>
                 <tr>
-                  <td id="week38"></td>
                   <td id="260"><span class="date">260</span><br>
                     <button onclick="increment(260)">&#9650;</button>
                     <span class="value">0</span>
@@ -2254,9 +2299,9 @@
                     <button onclick="decrement(266)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week38"></td>
                 </tr>
                 <tr>
-                  <td id="week39"></td>
                   <td id="267"><span class="date">267</span><br>
                     <button onclick="increment(267)">&#9650;</button>
                     <span class="value">0</span>
@@ -2299,9 +2344,9 @@
                     <button onclick="decrement(273)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week39"></td>
                 </tr>
                 <tr>
-                  <td id="week40"></td>
                   <td id="274"><span class="date">274</span><br>
                     <button onclick="increment(274)">&#9650;</button>
                     <span class="value">0</span>
@@ -2344,9 +2389,9 @@
                     <button onclick="decrement(280)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week40"></td>
                 </tr>
                 <tr>
-                  <td id="week41"></td>
                   <td id="281"><span class="date">281</span><br>
                     <button onclick="increment(281)">&#9650;</button>
                     <span class="value">0</span>
@@ -2389,9 +2434,9 @@
                     <button onclick="decrement(287)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week41"></td>
                 </tr>
                 <tr>
-                  <td id="week42"></td>
                   <td id="288"><span class="date">288</span><br>
                     <button onclick="increment(288)">&#9650;</button>
                     <span class="value">0</span>
@@ -2434,9 +2479,9 @@
                     <button onclick="decrement(294)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week42"></td>
                 </tr>
                 <tr>
-                  <td id="week43"></td>
                   <td id="295"><span class="date">295</span><br>
                     <button onclick="increment(295)">&#9650;</button>
                     <span class="value">0</span>
@@ -2479,9 +2524,9 @@
                     <button onclick="decrement(301)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week43"></td>
                 </tr>
                 <tr>
-                  <td id="week44"></td>
                   <td id="302"><span class="date">302</span><br>
                     <button onclick="increment(302)">&#9650;</button>
                     <span class="value">0</span>
@@ -2524,9 +2569,9 @@
                     <button onclick="decrement(308)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week44"></td>
                 </tr>
                 <tr>
-                  <td id="week45"></td>
                   <td id="309"><span class="date">309</span><br>
                     <button onclick="increment(309)">&#9650;</button>
                     <span class="value">0</span>
@@ -2569,9 +2614,9 @@
                     <button onclick="decrement(315)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week45"></td>
                 </tr>
                 <tr>
-                  <td id="week46"></td>
                   <td id="316"><span class="date">316</span><br>
                     <button onclick="increment(316)">&#9650;</button>
                     <span class="value">0</span>
@@ -2614,9 +2659,9 @@
                     <button onclick="decrement(322)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week46"></td>
                 </tr>
                 <tr>
-                  <td id="week47"></td>
                   <td id="323"><span class="date">323</span><br>
                     <button onclick="increment(323)">&#9650;</button>
                     <span class="value">0</span>
@@ -2659,9 +2704,9 @@
                     <button onclick="decrement(329)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week47"></td>
                 </tr>
                 <tr>
-                  <td id="week48"></td>
                   <td id="330"><span class="date">330</span><br>
                     <button onclick="increment(330)">&#9650;</button>
                     <span class="value">0</span>
@@ -2704,9 +2749,9 @@
                     <button onclick="decrement(336)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week48"></td>
                 </tr>
                 <tr>
-                  <td id="week49"></td>
                   <td id="337"><span class="date">337</span><br>
                     <button onclick="increment(337)">&#9650;</button>
                     <span class="value">0</span>
@@ -2749,9 +2794,9 @@
                     <button onclick="decrement(343)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week49"></td>
                 </tr>
                 <tr>
-                  <td id="week50"></td>
                   <td id="344"><span class="date">344</span><br>
                     <button onclick="increment(344)">&#9650;</button>
                     <span class="value">0</span>
@@ -2794,9 +2839,9 @@
                     <button onclick="decrement(350)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week50"></td>
                 </tr>
                 <tr>
-                  <td id="week51"></td>
                   <td id="351"><span class="date">351</span><br>
                     <button onclick="increment(351)">&#9650;</button>
                     <span class="value">0</span>
@@ -2839,9 +2884,9 @@
                     <button onclick="decrement(357)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week51"></td>
                 </tr>
                 <tr>
-                  <td id="week52"></td>
                   <td id="358"><span class="date">358</span><br>
                     <button onclick="increment(358)">&#9650;</button>
                     <span class="value">0</span>
@@ -2884,9 +2929,9 @@
                     <button onclick="decrement(364)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week52"></td>
                 </tr>
                 <tr>
-                  <td id="week53"></td>
                   <td id="365"><span class="date">365</span><br>
                     <button onclick="increment(365)">&#9650;</button>
                     <span class="value">0</span>
@@ -2929,9 +2974,9 @@
                     <button onclick="decrement(371)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week53"></td>
                 </tr>
                 <tr>
-                  <td id="week54"></td>
                   <td id="372"><span class="date">372</span><br>
                     <button onclick="increment(372)">&#9650;</button>
                     <span class="value">0</span>
@@ -2974,6 +3019,7 @@
                     <button onclick="decrement(378)">&#9660;</button>
                     <br>
                   </td>
+                  <td id="week54"></td>
                 </tr>
               </table>
               
