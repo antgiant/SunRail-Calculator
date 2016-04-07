@@ -318,6 +318,7 @@
           //Determine Ticket costs
           reloadablePass = ($("input:radio[name=tickettype]:checked").val() == "reloadandbuy"?5.00:0.00);
           $("#reloadable-pass").text('$'+reloadablePass.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+		  var reloadable = ($("input:radio[name=tickettype]:checked").val() == "normal"?false:true);
           var rateKind = ($("input:radio[name=ratetype]:checked").val() == "reduced"?REDUCED:NORMAL);
           var dist = Math.abs(parseInt($("input:radio[name=countiesend]:checked").val()) - parseInt($("input:radio[name=countiesstart]:checked").val())) + 1;
           if (parseFloat($("#ratediscount").val())<0 || parseFloat($("#ratediscount").val()) > 100) {
@@ -328,7 +329,11 @@
           
           
           //Update the grand total cost of all ticket types
-          $("#roundtrip").val(ticketPrices[ROUND_TRIP][rateKind][dist]*discount);
+		  if (reloadable) {
+			$("#roundtrip").val(ticketPrices[ONE_WAY][rateKind][dist]*discount*2);
+		  } else {
+			$("#roundtrip").val(ticketPrices[ROUND_TRIP][rateKind][dist]*discount);
+		  }
           updateCost('day', -1, false);
           $("#weeklytrip").val(ticketPrices[WEEK_PASS][rateKind][dist]*lesserDiscount);
           updateCost('week', -1, false);
@@ -456,7 +461,7 @@
               </tr>
             </table>
             <br>
-            <label for="tickettype">Do you have a reloadable SunCard? (Gives 10% off)<br></label>
+            <label for="tickettype">Do you have a reloadable SunCard? (Gives 10% off, but turns Round-Trips into two One-Way Trips)<br></label>
               <input type="radio" name="tickettype" onchange="updateTicketCost()" value="normal" checked="checked" />No<br>
               <input type="radio" name="tickettype" onchange="updateTicketCost()" value="reloadandbuy" />No, but I will buy one<br>
               <input type="radio" name="tickettype" onchange="updateTicketCost()" value="reload" />Yes<br>
@@ -466,7 +471,7 @@
               <input type="text" id="ratediscount" name="ratediscount" onchange="updateTicketCost()" value="0" size="2" />%<br>
             <br>
             <p>
-              These options and prices are accurate as of 6/8/2015
+              These options and prices are accurate as of 4/7/2016
             </p>
             <button onclick="$( '#accordion' ).accordion({active: 1});">Done&nbsp;</button>
           </div>
