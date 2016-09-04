@@ -444,7 +444,7 @@
       <div data-role="header" class="jqm-header">
         <h1>SunRail Cost Calculator</h1>
       </div>
-
+      <a href="corp.html">Use Work Commuter Cost Calculator</a>
       <div data-role="content" id="accordion">
         <h3>Ticket Cost</h3>
           <div>
@@ -492,12 +492,15 @@
               <input type="radio" name="tickettype" onchange="updateTicketCost()" value="reloadandbuy" />No, but I will buy one<br>
               <input type="radio" name="tickettype" onchange="updateTicketCost()" value="reload" />Yes<br>
             <br>
-            <label for="ratediscount">If you get a rate discount, what percent is it? <br>
-            (Note: Enter your tax bracket percentage to estimate the savings of utilizing the Corporate Ticket Program)<br></label>
+            <label for="ratediscount">If you get a rate discount, what percent is it? <br></label>
               <input type="text" id="ratediscount" name="ratediscount" onchange="updateTicketCost()" value="0" size="2" />%<br>
             <br>
+			<h4>Corporate Options (i.e. Commuter Tax Benefits)</h4>
+			<p>
+				Please use the separate <a href="corp.html">Corporate Calculator</a>.
+			</p>
             <p>
-              These options and prices are accurate as of 4/7/2016
+              These options and prices are accurate as of 9/4/2016
             </p>
             <button style="width: auto !important;" onclick="$( '#accordion' ).accordion({active: 1});">Done&nbsp;</button>
           </div>
