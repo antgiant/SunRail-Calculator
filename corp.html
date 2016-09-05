@@ -68,9 +68,6 @@
         if ($.cookie("corp_taxrate") != undefined) {
           $("input[name=taxrate][value='"+$.cookie("corp_taxrate")+"']").prop("checked",true);
         }
-        if ($.cookie("corp_leftover") != undefined) {
-           $('#leftover').val($.cookie("corp_leftover"));
-        }
 
         //Setup Accordion display
         $( "#accordion" ).accordion({
@@ -88,7 +85,6 @@
         $.cookie("corp_countiesend", $("input:radio[name=countiesend]:checked").val(), { expires: 365 });
         $.cookie("corp_employerpercent", $("#employerpercent").val(), { expires: 365 });
         $.cookie("corp_taxrate", $("input:radio[name=taxrate]:checked").val(), { expires: 365 });
-        $.cookie("corp_leftover", $("#leftover").val(), { expires: 365 });
         
         //Constants to help understanding
         var NORMAL = 1;
