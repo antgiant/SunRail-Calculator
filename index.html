@@ -8,6 +8,7 @@
     <link href="jquery-ui.min.css" rel="stylesheet">
     <script src="jquery-1.9.1.min.js"></script>
     <script src="jquery-ui.min.js"></script>
+    <script src="jquery.cookie.js"></script>
     <script>
       //Setup global variables to hold various information.
       var offset = 0;
@@ -176,6 +177,23 @@
         return dat;
       }
       function setupCalendar() {
+        //Set default options to those saved in cookie (if they exist)
+        if ($.cookie("ratetype") != undefined) {
+          $("input[name=ratetype][value='"+$.cookie("ratetype")+"']").prop("checked",true);
+        }
+        if ($.cookie("countiesstart") != undefined) {
+          $("input[name=countiesstart][value='"+$.cookie("countiesstart")+"']").prop("checked",true);
+        }
+        if ($.cookie("countiesend") != undefined) {
+          $("input[name=countiesend][value='"+$.cookie("countiesend")+"']").prop("checked",true);
+        }
+        if ($.cookie("tickettype") != undefined) {
+          $("input[name=tickettype][value='"+$.cookie("tickettype")+"']").prop("checked",true);
+        }
+        if ($.cookie("ratediscount") != undefined) {
+           $('#ratediscount').val($.cookie("ratediscount"));
+        }
+        
         var today = new Date();
         offset = today.getDay() + 1;
         var monthNames = ["January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -283,6 +301,13 @@
           calculateTickets();
       }
       function updateTicketCost() {
+        //Save Current Selections to a Cookie
+        $.cookie("ratetype", $("input:radio[name=ratetype]:checked").val(), { expires: 365 });
+        $.cookie("countiesstart", $("input:radio[name=countiesstart]:checked").val(), { expires: 365 });
+        $.cookie("countiesend", $("input:radio[name=countiesend]:checked").val(), { expires: 365 });
+        $.cookie("tickettype", $("input:radio[name=tickettype]:checked").val(), { expires: 365 });
+        $.cookie("ratediscount", $("#ratediscount").val(), { expires: 365 });
+      
         //Constants to help understanding
         var NORMAL = 1;
         var REDUCED = 0;

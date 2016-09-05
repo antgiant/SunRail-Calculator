@@ -8,6 +8,7 @@
     <link href="jquery-ui.min.css" rel="stylesheet">
     <script src="jquery-1.9.1.min.js"></script>
     <script src="jquery-ui.min.js"></script>
+    <script src="jquery.cookie.js"></script>
     <script>
       //Setup global variables to hold various information.
       var roundtrip;
@@ -51,6 +52,26 @@
         }
       }
       function setupCalendar() {
+        //Set default options to those saved in cookie (if they exist)
+        if ($.cookie("corp_ratetype") != undefined) {
+          $("input[name=ratetype][value='"+$.cookie("corp_ratetype")+"']").prop("checked",true);
+        }
+        if ($.cookie("corp_countiesstart") != undefined) {
+          $("input[name=countiesstart][value='"+$.cookie("corp_countiesstart")+"']").prop("checked",true);
+        }
+        if ($.cookie("corp_countiesend") != undefined) {
+          $("input[name=countiesend][value='"+$.cookie("corp_countiesend")+"']").prop("checked",true);
+        }
+        if ($.cookie("corp_employerpercent") != undefined) {
+           $('#employerpercent').val($.cookie("corp_employerpercent"));
+        }
+        if ($.cookie("corp_taxrate") != undefined) {
+          $("input[name=taxrate][value='"+$.cookie("corp_taxrate")+"']").prop("checked",true);
+        }
+        if ($.cookie("corp_leftover") != undefined) {
+           $('#leftover').val($.cookie("corp_leftover"));
+        }
+
         //Setup Accordion display
         $( "#accordion" ).accordion({
           heightStyle: "content"
@@ -61,6 +82,14 @@
       }
 
       function updateTicketCost() {
+        //Save Current Selections to a Cookie
+        $.cookie("corp_ratetype", $("input:radio[name=ratetype]:checked").val(), { expires: 365 });
+        $.cookie("corp_countiesstart", $("input:radio[name=countiesstart]:checked").val(), { expires: 365 });
+        $.cookie("corp_countiesend", $("input:radio[name=countiesend]:checked").val(), { expires: 365 });
+        $.cookie("corp_employerpercent", $("#employerpercent").val(), { expires: 365 });
+        $.cookie("corp_taxrate", $("input:radio[name=taxrate]:checked").val(), { expires: 365 });
+        $.cookie("corp_leftover", $("#leftover").val(), { expires: 365 });
+        
         //Constants to help understanding
         var NORMAL = 1;
         var REDUCED = 0;
