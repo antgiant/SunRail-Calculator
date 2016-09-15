@@ -361,22 +361,22 @@
           if (parseFloat($("#ratediscount").val())<0 || parseFloat($("#ratediscount").val()) > 100) {
             $("#ratediscount").val("0");
           }
-          var discount = 1.0 - (parseFloat($("#ratediscount").val())/100 + ($("input:radio[name=tickettype]:checked").val() != "normal"?.1:0));
-          var lesserDiscount = 1.0 - (parseFloat($("#ratediscount").val())/100);
+          var cardDiscount = 1.0 + ($("input:radio[name=tickettype]:checked").val() != "normal"?.1:0);
+          var rateDiscount = 1.0 - (parseFloat($("#ratediscount").val())/100);
           
           
           //Update the grand total cost of all ticket types
 		  if (reloadable) {
-			$("#roundtrip").val(ticketPrices[ONE_WAY][rateKind][dist]*discount*2);
+        $("#roundtrip").val(((ticketPrices[ONE_WAY][rateKind][dist]*rateDiscount)/cardDiscount)*2);
 		  } else {
-			$("#roundtrip").val(ticketPrices[ROUND_TRIP][rateKind][dist]*discount);
+        $("#roundtrip").val((ticketPrices[ROUND_TRIP][rateKind][dist]*rateDiscount)/cardDiscount);
 		  }
           updateCost('day', -1, false);
-          $("#weeklytrip").val(ticketPrices[WEEK_PASS][rateKind][dist]*lesserDiscount);
+          $("#weeklytrip").val(ticketPrices[WEEK_PASS][rateKind][dist]*rateDiscount);
           updateCost('week', -1, false);
-          $("#monthtrip").val(ticketPrices[MONTH_PASS][rateKind][dist]*lesserDiscount);
+          $("#monthtrip").val(ticketPrices[MONTH_PASS][rateKind][dist]*rateDiscount);
           updateCost('month', -1, false);
-          $("#yeartrip").val(ticketPrices[YEAR_PASS][rateKind][dist]*lesserDiscount);
+          $("#yeartrip").val(ticketPrices[YEAR_PASS][rateKind][dist]*rateDiscount);
           updateCost('year', -1, true);
          
       }
