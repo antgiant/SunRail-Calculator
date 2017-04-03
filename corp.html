@@ -28,7 +28,7 @@
           var costTotal = 0;
           if (roundType == "nearest") {
             costTotal = Math.ceil(((i*roundtrip) - leftover)/1.1);
-          } else if (roundType == "ticket") {
+          } else if (roundType == "ticket" && ((i*roundtrip) - leftover)/1.1 > 0) {
             for (var j = i; j < 1000; j++) {
               if (Math.abs((((j*roundtrip) - leftover)/1.1) - Math.round(((j*roundtrip) - leftover)/1.1)) < 0.01) {
                 costTotal = (((j*roundtrip) - leftover)/1.1);
