@@ -22,9 +22,26 @@
         return "$"+parseFloat(money).toFixed(2);
       }
       function calculateTickets() {
+        var roundType = $("input:radio[name=roundingtype]:checked").val();
         //Master Calculation Loop
         for (var i = 0; i < 32; i++) {
-          if ((((i*roundtrip) - leftover)/1.1) < 10.0) {
+          var costTotal = 0;
+          if (roundType == "nearest") {
+            costTotal = Math.ceil(((i*roundtrip) - leftover)/1.1);
+          } else if (roundType == "ticket") {
+            for (var j = i; j < 64; j++) {
+              if (Math.abs((((j*roundtrip) - leftover)/1.1) - Math.round(((j*roundtrip) - leftover)/1.1)) < 0.01) {
+                costTotal = (((j*roundtrip) - leftover)/1.1);
+                j = 65;
+              }
+            }
+            if (costTotal == 0) {
+              costTotal = monthtrip + 10; //Just ensuring that this is always the wrong choice below.
+            }
+          } else { //Also includes "none"
+            costTotal = (((i*roundtrip) - leftover)/1.1);
+          }
+          if (costTotal < 10.0) {
             //Required to spend a minimum of $10.
             $("#"+i).html("\n"+
                           "                  <td>"+i+"</td>\n"+
@@ -33,13 +50,13 @@
                           "                  <td>N/A*</td>\n"+ //Actual Cost
                           "                  <td>N/A*</td>"); //Out of Pocket Cost
           } else {
-            if ((((i*roundtrip) - leftover)/1.1) < monthtrip) {
+            if (costTotal < monthtrip) {
               $("#"+i).html("\n"+
                             "                  <td>"+i+"</td>\n"+
                             "                  <td>Stored Value</td>\n"+ //Ticket Type
-                            "                  <td>"+formatAsMoney(((i*roundtrip) - leftover)/1.1)+"</td>\n"+ //Listed Cost
-                            "                  <td>"+(employerpercent <=100 && employerpercent > 0?formatAsMoney((((i*roundtrip) - leftover)/1.1)*((100-employerpercent)/100)):"N/A")+"</td>\n"+ //Actual Cost
-                            "                  <td>"+(taxrate <=100 && taxrate > 0 && employerpercent <=100 && employerpercent > 0?formatAsMoney((((i*roundtrip) - leftover)/1.1)*((100-employerpercent)/100)*((100-taxrate)/100)):"N/A")+"</td>"); //Out of Pocket Cost
+                            "                  <td>"+formatAsMoney(costTotal)+"</td>\n"+ //Listed Cost
+                            "                  <td>"+(employerpercent <=100 && employerpercent > 0?formatAsMoney((costTotal)*((100-employerpercent)/100)):"N/A")+"</td>\n"+ //Actual Cost
+                            "                  <td>"+(taxrate <=100 && taxrate > 0 && employerpercent <=100 && employerpercent > 0?formatAsMoney(costTotal*((100-employerpercent)/100)*((100-taxrate)/100)):"N/A")+"</td>"); //Out of Pocket Cost
             } else {
               $("#"+i).html("\n"+
                             "                  <td>"+i+"</td>\n"+
@@ -68,6 +85,9 @@
         if ($.cookie("corp_taxrate") != undefined) {
           $("input[name=taxrate][value='"+$.cookie("corp_taxrate")+"']").prop("checked",true);
         }
+        if ($.cookie("corp_roundingtype") != undefined) {
+          $("input[name=roundingtype][value='"+$.cookie("corp_roundingtype")+"']").prop("checked",true);
+        }
 
         //Setup Accordion display
         $( "#accordion" ).accordion({
@@ -85,6 +105,7 @@
         $.cookie("corp_countiesend", $("input:radio[name=countiesend]:checked").val(), { expires: 365 });
         $.cookie("corp_employerpercent", $("#employerpercent").val(), { expires: 365 });
         $.cookie("corp_taxrate", $("input:radio[name=taxrate]:checked").val(), { expires: 365 });
+        $.cookie("corp_roundingtype", $("input:radio[name=roundingtype]:checked").val(), { expires: 365 });
         
         //Constants to help understanding
         var NORMAL = 1;
@@ -263,6 +284,12 @@
             <br>
             <label for="leftover">How much money is on your card? (Use this if you have leftover money you want to account for.)<br></label>
               $<input type="text" id="leftover" name="leftover" onchange="updateTicketCost()" value="0" size="2" /><br>
+            <br>
+            <br>
+            <label for="roundingtype">Rounding Method? (Some providers like Connect Your Care only support whole dollar amounts.)<br></label>
+              <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="none" checked="checked"/>No Rounding (precise to the penny)<br>
+              <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="nearest" />Round to the Nearest Dollar<br>
+              <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="ticket" />Round to the Nearest whole dollar Ticket<br>
             <br>
 
             <p>
