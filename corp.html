@@ -193,6 +193,15 @@
         color: white;
         text-shadow: 0 1px 0 #000;
       }
+      .heading {
+        background-color: lightskyblue;
+      }
+      .striped {
+        background-color: lightblue;
+      }
+      .taxrate {
+        text-align: center;
+      }
     </style>
   </head>
   <body>
@@ -265,34 +274,32 @@
               <input type="text" id="employerpercent" name="employerpercent" onchange="updateTicketCost()" value="0" size="2" />%<br>
             <br>
             <label for="taxrate">What is your tax bracket? (This is only needed if you want to know what your out of pocket equivalent would be.)<br></label>
-              <table>
+              <input type="radio" name="taxrate" onchange="updateTicketCost()" value="0" checked="checked"/> Prefer Not to Answer
+              <table class="taxrate">
                 <tbody>
-                  <tr>
-                    <th></th><th>Tax Rate</th><th>Single</th><th>Married Filing Joint</th><th>Married Filing Separate</th><th>Head of Household</th>
+                  <tr class="heading">
+                    <th></th><th>Tax Rate</th><th>Single</th><th>Married Filing Separate</th><th>Head of Household</th><th>Married Filing Joint</th>
+                  </tr>
+                  <tr class="striped">
+                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="10" /></td><td>10%</td><td>Up to $9,525</td><td>Up to $9,525</td><td>Up to $13,600</td><td>Up to $19,050</td>
                   </tr>
                   <tr>
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="0" checked="checked"/></td><td colspan="5">Prefer Not to Answer</td>
+                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="15" /></td><td>12%</td><td>$9,525 &ndash; $38,700</td><td>$9,525 &ndash; $38,700</td><td>$13,600 &ndash; $51,800</td><td>$19,050 &ndash; $77,400</td>
+                  </tr>
+                  <tr class="striped">
+                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="25" /></td><td>22%</td><td>$37,700 &ndash; $82,500</td><td>$37,700 &ndash; $82,500</td><td>$51,800 &ndash; $82,500</td><td>$77,400 &ndash; $165,000</td>
                   </tr>
                   <tr>
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="10" /></td><td>10%</td><td>Up to $9,250</td><td>Up to $18,475</td><td>Up to $9,250</td><td>Up to $13,175</td>
+                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="28" /></td><td>24%</td><td>$82,500 &ndash; $157,500</td><td>$82,500 &ndash; $157,500</td><td>$82,500 &ndash; $157,500</td><td>$165,000 &ndash; $315,000</td>
+                  </tr>
+                  <tr class="striped">
+                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="33" /></td><td>32%</td><td>$157,500 &ndash; $200,000</td><td>$157,500 &ndash; $200,000</td><td>$157,500 &ndash; $200,000</td><td>$315,000 &ndash; $400,000</td>
                   </tr>
                   <tr>
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="15" /></td><td>15%</td><td>$9,251 &ndash; $37,500</td><td>$18,476 &ndash; $74,975</td><td>$9,251 &ndash; $37,500</td><td>$13,176 &ndash; $50,250</td>
+                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="35" /></td><td>35%</td><td>$200,000 &ndash; $500,000</td><td>$200,000 &ndash; $300,000</td><td>$200,000 &ndash; $500,000</td><td>$400,000 &ndash; $600,000</td>
                   </tr>
-                  <tr>
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="25" /></td><td>25%</td><td>$37,501 &ndash; $90,850</td><td>$74,976 &ndash; $151,375</td><td>$37,501 &ndash; $75,700</td><td>$50,251 &ndash; $129,750</td>
-                  </tr>
-                  <tr>
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="28" /></td><td>28%</td><td>$90,851 &ndash; $189,500</td><td>$151,376 &ndash; $230,700</td><td>$75,701 &ndash; $115,350</td><td>$129,751 &ndash; $210,100</td>
-                  </tr>
-                  <tr>
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="33" /></td><td>33%</td><td>$189,501 &ndash; $412,000</td><td>$230,701 &ndash; $412,000</td><td>$115,351 &ndash; $206,000</td><td>$210,101 &ndash; $412,000</td>
-                  </tr>
-                  <tr>
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="35" /></td><td>35%</td><td>$412,001 &ndash; $413,650</td><td>$412,001 &ndash; $465,350</td><td>$206,001 &ndash; $232,675</td><td>$412,001 &ndash; $439,500</td>
-                  </tr>
-                  <tr>
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="39.6" /></td><td>39.6%</td><td>Over $413,650</td><td>Over $465,350</td><td>Over $232,675</td><td>Over $439,500</td>
+                  <tr class="striped">
+                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="39.6" /></td><td>37%</td><td>Over $500,000</td><td>Over $300,000</td><td>Over $500,000</td><td>Over $600,000</td>
                   </tr>
                 </tbody>
               </table>
