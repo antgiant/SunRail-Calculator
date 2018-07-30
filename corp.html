@@ -59,14 +59,14 @@
                             "                  <td>Stored Value</td>\n"+ //Ticket Type
                             "                  <td>"+formatAsMoney(costTotal)+"</td>\n"+ //Listed Cost
                             "                  <td>"+(employerpercent <=100 && employerpercent > 0?formatAsMoney((costTotal)*((100-employerpercent)/100)):"N/A")+"</td>\n"+ //Actual Cost
-                            "                  <td>"+(taxrate <=100 && taxrate > 0 && employerpercent <=100 && employerpercent > 0?formatAsMoney(costTotal*((100-employerpercent)/100)*((100-taxrate)/100)):"N/A")+"</td>"); //Out of Pocket Cost
+                            "                  <td>"+(taxrate <=100 && taxrate > 0 && employerpercent <=100 && employerpercent >= 0?formatAsMoney(costTotal*((100-employerpercent)/100)*((100-taxrate)/100)):"N/A")+"</td>"); //Out of Pocket Cost
             } else {
               $("#"+i).html("\n"+
                             "                  <td>"+i+"</td>\n"+
                             "                  <td>Month Pass</td>\n"+ //Ticket Type
                             "                  <td>"+formatAsMoney(monthtrip)+"</td>\n"+ //Listed Cost
                             "                  <td>"+(employerpercent <=100 && employerpercent > 0?formatAsMoney((monthtrip)*((100-employerpercent)/100)):"N/A")+"</td>\n"+ //Actual Cost
-                            "                  <td>"+(taxrate <=100 && taxrate > 0 && employerpercent <=100 && employerpercent > 0?formatAsMoney((monthtrip)*((100-employerpercent)/100)*((100-taxrate)/100)):"N/A")+"</td>"); //Out of Pocket Cost
+                            "                  <td>"+(taxrate <=100 && taxrate > 0 && employerpercent <=100 && employerpercent >= 0?formatAsMoney((monthtrip)*((100-employerpercent)/100)*((100-taxrate)/100)):"N/A")+"</td>"); //Out of Pocket Cost
             }
           }
         }
