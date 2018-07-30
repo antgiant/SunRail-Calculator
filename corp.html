@@ -124,15 +124,19 @@
             ticketPrices[ONE_WAY][NORMAL][1] = '2.00';
             ticketPrices[ONE_WAY][NORMAL][2] = '3.00';
             ticketPrices[ONE_WAY][NORMAL][3] = '4.00';
+            ticketPrices[ONE_WAY][NORMAL][4] = '5.00';
             ticketPrices[ONE_WAY][REDUCED][1] = '1.00';
             ticketPrices[ONE_WAY][REDUCED][2] = '1.50';
             ticketPrices[ONE_WAY][REDUCED][3] = '2.00';
+            ticketPrices[ONE_WAY][REDUCED][4] = '2.50';
             ticketPrices[MONTH_PASS][NORMAL][1] = '56.00';
             ticketPrices[MONTH_PASS][NORMAL][2] = '84.00';
             ticketPrices[MONTH_PASS][NORMAL][3] = '112.00';
+            ticketPrices[MONTH_PASS][NORMAL][4] = '140.00';
             ticketPrices[MONTH_PASS][REDUCED][1] = '28.00';
             ticketPrices[MONTH_PASS][REDUCED][2] = '42.00';
             ticketPrices[MONTH_PASS][REDUCED][3] = '56.00';
+            ticketPrices[MONTH_PASS][REDUCED][4] = '70.00';
           //Determine Ticket costs
           var rateKind = ($("input:radio[name=ratetype]:checked").val() == "reduced"?REDUCED:NORMAL);
           var dist = Math.abs(parseInt($("input:radio[name=countiesend]:checked").val()) - parseInt($("input:radio[name=countiesstart]:checked").val())) + 1;
@@ -241,10 +245,18 @@
               </tr>
               <tr>
                 <td>
-                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="3" />Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, or Sand Lake Road
+                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="3" />Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or Meadow Woods
                 </td>
                 <td>
-                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="3" checked="checked"/>Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, or Sand Lake Road
+                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="3" checked="checked"/>Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or Meadow Woods
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="4" />Tupperware, Kissimmee/Amtrak, or Poinciana
+                </td>
+                <td>
+                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="4" />Tupperware, Kissimmee/Amtrak, or Poinciana
                 </td>
               </tr>
             </table>
