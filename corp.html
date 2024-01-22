@@ -112,7 +112,7 @@
         $.cookie("corp_employerpercent", $("#employerpercent").val(), { expires: 365 });
         $.cookie("corp_taxrate", $("input:radio[name=taxrate]:checked").val(), { expires: 365 });
         $.cookie("corp_roundingtype", $("input:radio[name=roundingtype]:checked").val(), { expires: 365 });
-        if ($("input:radio[name=roundingtype]:checked").val() != undefined) {
+        if ($("input:radio[name=roundingtype]:checked").val() != "none") {
           $.cookie("corp_onlystored", $("input:checkbox[name=onlystored]:checked").val(), { expires: 365 });
         }
         else {
