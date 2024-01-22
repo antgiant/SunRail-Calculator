@@ -91,6 +91,9 @@
         if ($.cookie("corp_roundingtype") != undefined) {
           $("input[name=roundingtype][value='"+$.cookie("corp_roundingtype")+"']").prop("checked",true);
         }
+        if ($.cookie("corp_onlystored") != undefined) {
+          $("input[name=onlystored][value='"+$.cookie("corp_onlystored")+"']").prop("checked",true);
+        }
 
         //Setup Accordion display
         $( "#accordion" ).accordion({
@@ -109,6 +112,7 @@
         $.cookie("corp_employerpercent", $("#employerpercent").val(), { expires: 365 });
         $.cookie("corp_taxrate", $("input:radio[name=taxrate]:checked").val(), { expires: 365 });
         $.cookie("corp_roundingtype", $("input:radio[name=roundingtype]:checked").val(), { expires: 365 });
+        $.cookie("corp_onlystored", $("input:checkbox[name=onlystored]:checked").val(), { expires: 365 });
         
         //Constants to help understanding
         var NORMAL = 1;
@@ -155,7 +159,12 @@
           
           //Update the grand total cost of all ticket types
           roundtrip = ticketPrices[ONE_WAY][rateKind][dist]*2;
-          monthtrip = ticketPrices[MONTH_PASS][rateKind][dist];
+          if ($("input:checkbox[name=onlystored]:checked").val() == "on") {
+            //Set round trip and month trip values impossibly high so only stored value can be an option
+            monthtrip = ticketPrices[MONTH_PASS][rateKind][dist]*40;
+          } else {
+            monthtrip = ticketPrices[MONTH_PASS][rateKind][dist];
+          }
          
          calculateTickets();
       }
@@ -277,6 +286,9 @@
             <br>
             <label for="leftover">How much money is on your card? (Use this if you have leftover money you want to account for.)<br></label>
               $<input type="text" id="leftover" name="leftover" onchange="updateTicketCost()" value="0" size="2" /><br>
+            <br>
+            <label for "onlystored">Only calculate Stored Value costs<br></label>
+              <input type="checkbox" id="onlystored" name="onlystored" onchange="updateTicketCost()" /><br>
             <br>
             <br>
             <h4>Optional (Allows for calculating your true out of pocket cost, aka the right two columns under Trip Planning)</h4>
