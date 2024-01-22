@@ -93,6 +93,8 @@
         }
         if ($.cookie("corp_onlystored") != undefined) {
           $("input[name=onlystored]").prop("checked",true);
+        } else {
+          $.removeCookie("corp_onlystored");
         }
 
         //Setup Accordion display
