@@ -93,8 +93,6 @@
         }
         if ($.cookie("corp_onlystored") != undefined) {
           $("input[name=onlystored]").prop("checked",true);
-        } else {
-          $.removeCookie("corp_onlystored");
         }
 
         //Setup Accordion display
@@ -114,7 +112,12 @@
         $.cookie("corp_employerpercent", $("#employerpercent").val(), { expires: 365 });
         $.cookie("corp_taxrate", $("input:radio[name=taxrate]:checked").val(), { expires: 365 });
         $.cookie("corp_roundingtype", $("input:radio[name=roundingtype]:checked").val(), { expires: 365 });
-        $.cookie("corp_onlystored", $("input:checkbox[name=onlystored]:checked").val(), { expires: 365 });
+        if ($("input:radio[name=roundingtype]:checked").val() != undefined) {
+          $.cookie("corp_onlystored", $("input:checkbox[name=onlystored]:checked").val(), { expires: 365 });
+        }
+        else {
+          $.removeCookie("corp_onlystored");
+        }
         
         //Constants to help understanding
         var NORMAL = 1;
