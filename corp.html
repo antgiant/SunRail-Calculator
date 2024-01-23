@@ -274,10 +274,10 @@
               </tr>
             </table>
             <br>
-            <label for="roundingtype">Rounding Method? (Some providers like Connect Your Care only support whole dollar amounts.)<br></label>
-              <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="none" checked="checked"/>No Rounding (precise to the penny)<br>
+            <label for="roundingtype">Rounding Method? (Some providers like Optum Financial only support whole dollar amounts.)<br></label>
+              <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="none"/>No Rounding (precise to the penny)<br>
               <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="nearest" />Round to the Nearest Dollar<br>
-              <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="ticket" />Round to the Nearest whole dollar Ticket<br>
+              <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="ticket" checked="checked"/>Round to the Nearest whole dollar Ticket<br>
             <br>
             <label for="leftover">How much money is on your card? (Use this if you have leftover money you want to account for.)<br></label>
               $<input type="text" id="leftover" name="leftover" onchange="updateTicketCost()" value="0" size="2" /><br>
