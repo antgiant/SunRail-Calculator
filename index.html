@@ -462,6 +462,12 @@
         width: 56px;
         height: 38px;
       }
+      .row {
+        display: flex;
+      }
+      .column {
+        flex: 50%;
+      } 
     </style>
   </head>
   <body>
@@ -473,60 +479,51 @@
       <div data-role="content" id="accordion">
         <h3>Ticket Cost</h3>
           <div>
-            <label for="ratetype">What is your rate type?<br></label>
-              <input type="radio" name="ratetype" onchange="updateTicketCost()" value="normal" checked="checked"/>Adult (18-64)<br>
-              <input type="radio" name="ratetype" onchange="updateTicketCost()" value="reduced" />Disabled, Senior (65+), or Student (7-17)<br>
+            <fieldset><legend>What is your rate type?</legend>
+              <label><input type="radio" name="ratetype" onchange="updateTicketCost()" value="normal" checked="checked" />Adult
+              (18-64)</label><br>
+              <label><input type="radio" name="ratetype" onchange="updateTicketCost()" value="reduced" />Disabled, Senior (65+), or
+              Student (7-17)</label>
+            </fieldset>
             <br>
-            <table>
-              <tr>
-                <th>
-                  <label for="countiesstart">Where are you starting?</label>
-                </th>
-                <th>
-                  <label for="countiesend">Where are you ending?</label>
-                </th>
-              </tr>
-              <tr>
-                <td>
-                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="1" />Debary
-                </td>
-                <td>
-                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="1" />Debary
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="2" checked="checked"/>Sanford, Lake Mary, Longwood, or Altamonte Springs
-                </td>
-                <td>
-                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="2" />Sanford, Lake Mary, Longwood, or Altamonte Springs
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="3" />Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or Meadow Woods
-                </td>
-                <td>
-                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="3" checked="checked"/>Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or Meadow Woods
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="4" />Tupperware, Kissimmee/Amtrak, or Poinciana
-                </td>
-                <td>
-                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="4"/>Tupperware, Kissimmee/Amtrak, or Poinciana
-                </td>
-              </tr>
-            </table>
+            <div class="row">
+              <div class="column">
+                <fieldset>
+                  <legend>Where are you starting?</legend>
+                  <label><input type="radio" name="countiesstart" onchange="updateTicketCost()" value="1" />Debary</label><br>
+                  <label><input type="radio" name="countiesstart" onchange="updateTicketCost()" value="2" checked="checked" />Sanford, Lake Mary, Longwood, or Altamonte Springs</label><br>
+                  <label><input type="radio" name="countiesstart" onchange="updateTicketCost()" value="3" />Maitland, Winter Park,
+                    Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or
+                    Meadow Woods</label><br>
+                  <label><input type="radio" name="countiesstart" onchange="updateTicketCost()" value="4" />Tupperware,
+                    Kissimmee/Amtrak, or Poinciana</label>
+                </fieldset>
+              </div>
+              <div class="column">
+                <fieldset>
+                  <legend>Where are you starting?</legend>
+                  <label><input type="radio" name="countiesend" onchange="updateTicketCost()" value="1" />Debary</label><br>
+                  <label><input type="radio" name="countiesend" onchange="updateTicketCost()" value="2" checked="checked" />Sanford, Lake Mary, Longwood, or Altamonte Springs</label><br>
+                  <label><input type="radio" name="countiesend" onchange="updateTicketCost()" value="3" />Maitland, Winter Park,
+                    Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or
+                    Meadow Woods</label><br>
+                  <label><input type="radio" name="countiesend" onchange="updateTicketCost()" value="4" />Tupperware,
+                    Kissimmee/Amtrak, or Poinciana</label>
+                </fieldset>
+              </div>
+            </div>
             <br>
-            <label for="tickettype">Do you have a reloadable SunCard? (Gives 10% off, but turns Round-Trips into two One-Way Trips)<br></label>
-              <input type="radio" name="tickettype" onchange="updateTicketCost()" value="normal" checked="checked" />No<br>
-              <input type="radio" name="tickettype" onchange="updateTicketCost()" value="reloadandbuy" />No, but I will buy one<br>
-              <input type="radio" name="tickettype" onchange="updateTicketCost()" value="reload" />Yes<br>
+            <fieldset>
+              <legend>Do you have a reloadable SunCard? (Gives 10% off, but turns Round-Trips into two One-Way Trips)</legend>
+              <label><input type="radio" name="tickettype" onchange="updateTicketCost()" value="normal" checked="checked" />No</label><br>
+              <label><input type="radio" name="tickettype" onchange="updateTicketCost()" value="reloadandbuy" />No, but I will buy one</label><br>
+              <label><input type="radio" name="tickettype" onchange="updateTicketCost()" value="reload" />Yes</label><br>
+            </fieldset>
             <br>
-            <label for="ratediscount">If you get a rate discount, what percent is it? <br></label>
-              <input type="text" id="ratediscount" name="ratediscount" onchange="updateTicketCost()" value="0" size="2" />%<br>
+            <fieldset>
+              <legend>Do you get a rate discount?</legend>
+              <label><input type="text" id="ratediscount" name="ratediscount" onchange="updateTicketCost()" value="0" size="2" />% Discount</label>
+            </fieldset>
             <br>
 			<h4>Corporate Options (i.e. Commuter Tax Benefits)</h4>
 			<p>
