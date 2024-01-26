@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
   <head>
     <title>SunRail Calculator</title>
@@ -189,7 +189,7 @@
 		}
 
 		button {
-			width: 38px !important;
+			width: auto !important;
 		}
 
 		fieldset {
@@ -234,6 +234,14 @@
       .taxrate {
         text-align: center;
       }
+
+      .row {
+        display: flex;
+      }
+
+      .column {
+        flex: 50%;
+      } 
     </style>
   </head>
 
@@ -246,123 +254,104 @@
       <div data-role="content" id="accordion">
         <h3>Ticket Cost</h3>
           <div>
-            <label for="ratetype">What is your rate type?<br></label>
-        <input type="radio" name="ratetype" onchange="updateTicketCost()" value="normal" checked="checked" />Adult
-        (18-64)<br>
-        <input type="radio" name="ratetype" onchange="updateTicketCost()" value="reduced" />Disabled, Senior (65+), or
-        Student (7-17)<br>
+            <fieldset><legend>What is your rate type?</legend>
+              <label><input type="radio" name="ratetype" onchange="updateTicketCost()" value="normal" checked="checked" />Adult
+              (18-64)</label><br>
+              <label><input type="radio" name="ratetype" onchange="updateTicketCost()" value="reduced" />Disabled, Senior (65+), or
+              Student (7-17)</label><br>
+            </fieldset>
             <br>
-            <table>
-              <tr>
-                <th>
-                  <label for="countiesstart">Where are you starting?</label>
-                </th>
-                <th>
-                  <label for="countiesend">Where are you ending?</label>
-                </th>
-              </tr>
-              <tr>
-                <td>
-                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="1" />Debary
-                </td>
-                <td>
-                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="1" />Debary
-                </td>
-              </tr>
-              <tr>
-                <td>
-              <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="2"
-                checked="checked" />Sanford, Lake Mary, Longwood, or Altamonte Springs
-                </td>
-                <td>
-              <input type="radio" name="countiesend" onchange="updateTicketCost()" value="2" />Sanford, Lake Mary,
-              Longwood, or Altamonte Springs
-                </td>
-              </tr>
-              <tr>
-                <td>
-              <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="3" />Maitland, Winter Park,
-              Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or
-              Meadow Woods
-                </td>
-                <td>
-              <input type="radio" name="countiesend" onchange="updateTicketCost()" value="3"
-                checked="checked" />Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street,
-              Orlando Health/Amtrak, Sand Lake Road, or Meadow Woods
-                </td>
-              </tr>
-              <tr>
-                <td>
-              <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="4" />Tupperware,
-              Kissimmee/Amtrak, or Poinciana
-                </td>
-                <td>
-              <input type="radio" name="countiesend" onchange="updateTicketCost()" value="4" />Tupperware,
-              Kissimmee/Amtrak, or Poinciana
-                </td>
-              </tr>
-            </table>
+            <div class="row">
+              <div class="column">
+                <fieldset><legend>Where are you starting?</legend>
+                  <label><input type="radio" name="countiesstart" onchange="updateTicketCost()" value="1" />Debary</label><br>
+                  <label><input type="radio" name="countiesstart" onchange="updateTicketCost()" value="2"
+                  checked="checked" />Sanford, Lake Mary, Longwood, or Altamonte Springs</label><br>
+                  <label><input type="radio" name="countiesstart" onchange="updateTicketCost()" value="3" />Maitland, Winter Park,
+                  Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or
+                  Meadow Woods</label><br>
+                  <label><input type="radio" name="countiesstart" onchange="updateTicketCost()" value="4" />Tupperware,
+                  Kissimmee/Amtrak, or Poinciana</label>
+                </fieldset>
+              </div>
+              <div class="column">
+                <fieldset><legend>Where are you starting?</legend>
+                  <label><input type="radio" name="countiesend" onchange="updateTicketCost()" value="1" />Debary</label><br>
+                  <label><input type="radio" name="countiesend" onchange="updateTicketCost()" value="2"
+                  checked="checked" />Sanford, Lake Mary, Longwood, or Altamonte Springs</label><br>
+                  <label><input type="radio" name="countiesend" onchange="updateTicketCost()" value="3" />Maitland, Winter Park,
+                  Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or
+                  Meadow Woods</label><br>
+                  <label><input type="radio" name="countiesend" onchange="updateTicketCost()" value="4" />Tupperware,
+                  Kissimmee/Amtrak, or Poinciana</label>
+                </fieldset>
+              </div>
+            </div>
             <br>
-        <label for="roundingtype">Rounding Method? (Some providers like Optum Financial only support whole dollar
-          amounts.)<br></label>
-        <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="none" />No Rounding (precise to the
-        penny)<br>
-        <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="nearest" />Round to the Nearest
-        Dollar<br>
-        <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="ticket" checked="checked" />Round
-        to the Nearest whole dollar Ticket<br>
+            <fieldset><legend>Rounding Method? (Some providers like Optum Financial only support whole dollar
+          amounts.)</legend>
+              <label><input type="radio" name="roundingtype" onchange="updateTicketCost()" value="none" />No Rounding (precise to the
+        penny)</label><br>
+              <label><input type="radio" name="roundingtype" onchange="updateTicketCost()" value="nearest" />Round to the Nearest
+        Dollar</label><br>
+              <label><input type="radio" name="roundingtype" onchange="updateTicketCost()" value="ticket" checked="checked" />Round
+              to the Nearest whole dollar Ticket</label>
+            </fieldset>
             <br>
-        <label for="leftover">How much money is on your card? (Use this if you have leftover money you want to account
-          for.)<br></label>
-              $<input type="text" id="leftover" name="leftover" onchange="updateTicketCost()" value="0" size="2" /><br>
+            <fieldset><legend>How much money is on your card? (Use this if you have leftover money you want to account
+          for.)</legend>
+              <label>$<input type="text" id="leftover" name="leftover" onchange="updateTicketCost()" value="0" size="2" /></label>
+            </fieldset>
             <br>
-            <label for "onlystored">Only calculate Stored Value costs<br></label>
-              <input type="checkbox" id="onlystored" name="onlystored" onchange="updateTicketCost()" /><br>
-            <br>
+            <fieldset><legend>Calculation Type</legend>
+              <label><input type="checkbox" id="onlystored" name="onlystored" onchange="updateTicketCost()" /> Only calculate Stored Value costs<br></label>
+            </fieldset>
             <br>
         <h4>Optional (Allows for calculating your true out of pocket cost, aka the right two columns under Trip
           Planning)</h4>
-            <label for="employerpercent">What percent does your employer contribute? <br></label>
-        <input type="text" id="employerpercent" name="employerpercent" onchange="updateTicketCost()" value="0"
-          size="2" />%<br>
+          <fieldset><legend>Calculate Your Cost</legend>
+            <label><input type="text" id="employerpercent" name="employerpercent" onchange="updateTicketCost()" value="0"
+              size="2" /> Percent your employer contributes <br></label>
+          </fieldset>
+        <br>
             <br>
-        <label for="taxrate">What is your tax bracket? (This is only needed if you want to know what your out of pocket
-          equivalent would be.)<br></label>
+            <fieldset><legend>Calculate After Tax Equivalent (Enter Tax Rate)</legend>
         <input type="radio" name="taxrate" onchange="updateTicketCost()" value="0" checked="checked" /> Prefer Not to
         Answer
               <table class="taxrate">
                 <tbody>
                   <tr class="heading">
-                    <th></th>                                                                              <th>Tax Rate</th> <th>Filing Single</th>                     <th>Married Filing Joint</th>
+                    <th></th>                                                                              <th>Tax Rate</th>                                             <th>Filing Single</th>                     <th>Married Filing Joint</th>
                   </tr>
                   <tr class="striped">
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="10" /></td><td>10%</td>      <td>Up to $11,600</td>                     <td>Up to $23,200</td>
+                    <td><input type="radio" name="taxrate" id="taxrate1" onchange="updateTicketCost()" value="10" /></td><td><label for="taxrate1">10%</label></td>      <td>Up to $11,600</td>                     <td>Up to $23,200</td>
                   </tr>
                   <tr>
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="12" /></td><td>12%</td>      <td>$11,600 &ndash; $47,150</td>           <td>$23,200 &ndash; $94,300</td>
+                    <td><input type="radio" name="taxrate" id="taxrate2" onchange="updateTicketCost()" value="12" /></td><td><label for="taxrate2">12%</label></td>      <td>$11,600 &ndash; $47,150</td>           <td>$23,200 &ndash; $94,300</td>
                   </tr>
                   <tr class="striped">
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="22" /></td><td>22%</td>      <td>$47,150 &ndash; $100,525</td>          <td>$94,300 &ndash; $201,500</td>
+                    <td><input type="radio" name="taxrate" id="taxrate3" onchange="updateTicketCost()" value="22" /></td><td><label for="taxrate3">22%</label></td>      <td>$47,150 &ndash; $100,525</td>          <td>$94,300 &ndash; $201,500</td>
                   </tr>
                   <tr>
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="24" /></td><td>24%</td>      <td>$100,525 &ndash; $191,950</td>         <td>$201,500 &ndash; $383,900</td>
+                    <td><input type="radio" name="taxrate" id="taxrate4" onchange="updateTicketCost()" value="24" /></td><td><label for="taxrate4">24%</label></td>      <td>$100,525 &ndash; $191,950</td>         <td>$201,500 &ndash; $383,900</td>
                   </tr>
                   <tr class="striped">
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="32" /></td><td>32%</td>      <td>$191,950 &ndash; $243,725</td>         <td>$383,900 &ndash; $487,450</td>
+                    <td><input type="radio" name="taxrate" id="taxrate5" onchange="updateTicketCost()" value="32" /></td><td><label for="taxrate5">32%</label></td>      <td>$191,950 &ndash; $243,725</td>         <td>$383,900 &ndash; $487,450</td>
                   </tr>
                   <tr>
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="35" /></td><td>35%</td>      <td>$243,725 &ndash; $609,350</td>         <td>$487,450 &ndash; $731,200</td>
+                    <td><input type="radio" name="taxrate" id="taxrate6" onchange="updateTicketCost()" value="35" /></td><td><label for="taxrate6">35%</label></td>      <td>$243,725 &ndash; $609,350</td>         <td>$487,450 &ndash; $731,200</td>
                   </tr>
                   <tr class="striped">
-                    <td><input type="radio" name="taxrate" onchange="updateTicketCost()" value="37" /></td><td>37%</td>      <td>Over $609,350</td>                     <td>Over $731,200</td>
+                    <td><input type="radio" name="taxrate" id="taxrate7" onchange="updateTicketCost()" value="37" /></td><td><label for="taxrate7">37%</label></td>      <td>Over $609,350</td>                     <td>Over $731,200</td>
                   </tr>
                 </tbody>
               </table>
+            </fieldset>
             <br>
             <p>
               These options and prices are accurate as of 1/22/2024
             </p>
-        <button style="width: auto !important;"
+        <button
           onclick="calculateTickets();$( '#accordion' ).accordion({active: 1});">Calculate</button>
           </div>
         <h3>Trip Planning</h3>
@@ -591,7 +580,7 @@
               *You are required to spend a minimum of $10 through the corporate program.
             </p>
           </div>
-        <button style="width: auto !important;"
+        <button
           onclick="calculateTickets();$( '#accordion' ).accordion({active: 0});">Configure</button>
       </div>
     </div>
