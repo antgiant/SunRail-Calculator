@@ -254,20 +254,26 @@
       <div data-role="content" id="accordion">
         <h3>Ticket Cost</h3>
           <div>
-            <fieldset><legend>What is your rate type?</legend>
-              <label><input type="radio" name="ratetype" onchange="updateTicketCost()" value="normal" checked="checked" />Adult
+        <fieldset>
+          <legend>What is your rate type?</legend>
+          <label><input type="radio" name="ratetype" onchange="updateTicketCost()" value="normal"
+              checked="checked" />Adult
               (18-64)</label><br>
-              <label><input type="radio" name="ratetype" onchange="updateTicketCost()" value="reduced" />Disabled, Senior (65+), or
+          <label><input type="radio" name="ratetype" onchange="updateTicketCost()" value="reduced" />Disabled, Senior
+            (65+), or
               Student (7-17)</label><br>
             </fieldset>
             <br>
             <div class="row">
               <div class="column">
-                <fieldset><legend>Where are you starting?</legend>
-                  <label><input type="radio" name="countiesstart" onchange="updateTicketCost()" value="1" />Debary</label><br>
+            <fieldset>
+              <legend>Where are you starting?</legend>
+              <label><input type="radio" name="countiesstart" onchange="updateTicketCost()"
+                  value="1" />Debary</label><br>
                   <label><input type="radio" name="countiesstart" onchange="updateTicketCost()" value="2"
                   checked="checked" />Sanford, Lake Mary, Longwood, or Altamonte Springs</label><br>
-                  <label><input type="radio" name="countiesstart" onchange="updateTicketCost()" value="3" />Maitland, Winter Park,
+              <label><input type="radio" name="countiesstart" onchange="updateTicketCost()" value="3" />Maitland, Winter
+                Park,
                   Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or
                   Meadow Woods</label><br>
                   <label><input type="radio" name="countiesstart" onchange="updateTicketCost()" value="4" />Tupperware,
@@ -275,11 +281,13 @@
                 </fieldset>
               </div>
               <div class="column">
-                <fieldset><legend>Where are you starting?</legend>
+            <fieldset>
+              <legend>Where are you starting?</legend>
                   <label><input type="radio" name="countiesend" onchange="updateTicketCost()" value="1" />Debary</label><br>
                   <label><input type="radio" name="countiesend" onchange="updateTicketCost()" value="2"
                   checked="checked" />Sanford, Lake Mary, Longwood, or Altamonte Springs</label><br>
-                  <label><input type="radio" name="countiesend" onchange="updateTicketCost()" value="3" />Maitland, Winter Park,
+              <label><input type="radio" name="countiesend" onchange="updateTicketCost()" value="3" />Maitland, Winter
+                Park,
                   Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or
                   Meadow Woods</label><br>
                   <label><input type="radio" name="countiesend" onchange="updateTicketCost()" value="4" />Tupperware,
@@ -288,28 +296,37 @@
               </div>
             </div>
             <br>
-            <fieldset><legend>Rounding Method? (Some providers like Optum Financial only support whole dollar
+        <fieldset>
+          <legend>Rounding Method? (Some providers like Optum Financial only support whole dollar
           amounts.)</legend>
-              <label><input type="radio" name="roundingtype" onchange="updateTicketCost()" value="none" />No Rounding (precise to the
+          <label><input type="radio" name="roundingtype" onchange="updateTicketCost()" value="none" />No Rounding
+            (precise to the
         penny)</label><br>
-              <label><input type="radio" name="roundingtype" onchange="updateTicketCost()" value="nearest" />Round to the Nearest
+          <label><input type="radio" name="roundingtype" onchange="updateTicketCost()" value="nearest" />Round to the
+            Nearest
         Dollar</label><br>
-              <label><input type="radio" name="roundingtype" onchange="updateTicketCost()" value="ticket" checked="checked" />Round
+          <label><input type="radio" name="roundingtype" onchange="updateTicketCost()" value="ticket"
+              checked="checked" />Round
               to the Nearest whole dollar Ticket</label>
             </fieldset>
             <br>
-            <fieldset><legend>How much money is on your card? (Use this if you have leftover money you want to account
+        <fieldset>
+          <legend>How much money is on your card? (Use this if you have leftover money you want to account
           for.)</legend>
-              <label>$<input type="text" id="leftover" name="leftover" onchange="updateTicketCost()" value="0" size="2" /></label>
+          <label>$<input type="text" id="leftover" name="leftover" onchange="updateTicketCost()" value="0"
+              size="2" /></label>
             </fieldset>
             <br>
-            <fieldset><legend>Calculation Type</legend>
-              <label><input type="checkbox" id="onlystored" name="onlystored" onchange="updateTicketCost()" /> Only calculate Stored Value costs<br></label>
+        <fieldset>
+          <legend>Calculation Type</legend>
+          <label><input type="checkbox" id="onlystored" name="onlystored" onchange="updateTicketCost()" /> Only
+            calculate Stored Value costs<br></label>
             </fieldset>
             <br>
         <h4>Optional (Allows for calculating your true out of pocket cost, aka the right two columns under Trip
           Planning)</h4>
-          <fieldset><legend>Calculate "Your Cost"</legend>
+        <fieldset>
+          <legend>Calculate "Your Cost"</legend>
             <label><input type="text" id="employerpercent" name="employerpercent" onchange="updateTicketCost()" value="0"
               size="2" /> Percent your employer contributes <br></label>
           </fieldset>
@@ -351,8 +368,7 @@
             <p>
               These options and prices are accurate as of 1/22/2024
             </p>
-        <button
-          onclick="calculateTickets();$( '#accordion' ).accordion({active: 1});">Calculate</button>
+        <button onclick="calculateTickets();$( '#accordion' ).accordion({active: 1});">Calculate</button>
           </div>
         <h3>Trip Planning</h3>
         <div>
@@ -580,8 +596,7 @@
               *You are required to spend a minimum of $10 through the corporate program.
             </p>
           </div>
-        <button
-          onclick="calculateTickets();$( '#accordion' ).accordion({active: 0});">Configure</button>
+        <button onclick="calculateTickets();$( '#accordion' ).accordion({active: 0});">Configure</button>
       </div>
     </div>
   </div>
