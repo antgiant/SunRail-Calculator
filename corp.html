@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <title>SunRail Calculator</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A precise cost calculator for SunRail tickets. It allows you to easily determine the cheapest ticket combination for complex riding patterns." />
+  <meta name="description"
+    content="A precise cost calculator for SunRail tickets. It allows you to easily determine the cheapest ticket combination for complex riding patterns." />
     <link href="jquery-ui.min.css" rel="stylesheet">
     <script src="jquery-3.7.1.min.js"></script>
     <script src="jquery-ui.min.js"></script>
@@ -19,7 +21,7 @@
       $(document).ready(setupCalendar)
       function formatAsMoney(money) {
         //Will always be less than $1,000.00 so no need to worry about commas.
-        return "$"+parseFloat(money).toFixed(2);
+      return "$" + parseFloat(money).toFixed(2);
       }
       function calculateTickets() {
         var roundType = $("input:radio[name=roundingtype]:checked").val();
@@ -31,14 +33,14 @@
         var loopI = i;
         while (costTotal < 10) {
           if (roundType == "nearest") {
-            costTotal = Math.ceil(((loopI*roundtrip) - leftover)/1.1);
-          } else if (roundType == "ticket" && ((loopI*roundtrip) - leftover)/1.1 > 0) {
+            costTotal = Math.ceil(((loopI * roundtrip) - leftover) / 1.1);
+          } else if (roundType == "ticket" && ((loopI * roundtrip) - leftover) / 1.1 > 0) {
             for (var j = loopI; j < 1000; j++) {
-              if (Math.abs((((j*roundtrip) - leftover)/1.1) - Math.round(((j*roundtrip) - leftover)/1.1)) < 0.01) {
-                costTotal = (((j*roundtrip) - leftover)/1.1);
+              if (Math.abs((((j * roundtrip) - leftover) / 1.1) - Math.round(((j * roundtrip) - leftover) / 1.1)) < 0.01) {
+                costTotal = (((j * roundtrip) - leftover) / 1.1);
                 j = 1001;
               }
-              if ((((j*roundtrip) - leftover)/1.1) >= monthtrip) {
+              if ((((j * roundtrip) - leftover) / 1.1) >= monthtrip) {
                 j = 1001;
               }
             }
@@ -46,63 +48,63 @@
               costTotal = monthtrip + 10; //Just ensuring that this is always the wrong choice below.
             }
           } else { //Also includes "none"
-            costTotal = (((loopI*roundtrip) - leftover)/1.1);
+            costTotal = (((loopI * roundtrip) - leftover) / 1.1);
           }
           loopI++;
         }
             if (costTotal < monthtrip) {
-              $("#"+i).html("\n"+
-                            "                  <td>"+i+"</td>\n"+
-                            "                  <td>Stored Value</td>\n"+ //Ticket Type
-                            "                  <td>"+formatAsMoney(costTotal)+"</td>\n"+ //Listed Cost
-                            "                  <td>"+(employerpercent <=100 && employerpercent > 0?formatAsMoney((costTotal)*((100-employerpercent)/100)):"N/A")+"</td>\n"+ //Actual Cost
-                            "                  <td>"+(taxrate <=100 && taxrate > 0 && employerpercent <=100 && employerpercent >= 0?formatAsMoney(costTotal*((100-employerpercent)/100)*((100-taxrate)/100)):"N/A")+"</td>"); //Out of Pocket Cost
+          $("#" + i).html("\n" +
+            "                  <td>" + i + "</td>\n" +
+            "                  <td>Stored Value</td>\n" + //Ticket Type
+            "                  <td>" + formatAsMoney(costTotal) + "</td>\n" + //Listed Cost
+            "                  <td>" + (employerpercent <= 100 && employerpercent > 0 ? formatAsMoney((costTotal) * ((100 - employerpercent) / 100)) : "N/A") + "</td>\n" + //Actual Cost
+            "                  <td>" + (taxrate <= 100 && taxrate > 0 && employerpercent <= 100 && employerpercent >= 0 ? formatAsMoney(costTotal * ((100 - employerpercent) / 100) * ((100 - taxrate) / 100)) : "N/A") + "</td>"); //Out of Pocket Cost
             } else {
-              $("#"+i).html("\n"+
-                            "                  <td>"+i+"</td>\n"+
-                            "                  <td>Month Pass</td>\n"+ //Ticket Type
-                            "                  <td>"+formatAsMoney(monthtrip)+"</td>\n"+ //Listed Cost
-                            "                  <td>"+(employerpercent <=100 && employerpercent > 0?formatAsMoney((monthtrip)*((100-employerpercent)/100)):"N/A")+"</td>\n"+ //Actual Cost
-                            "                  <td>"+(taxrate <=100 && taxrate > 0 && employerpercent <=100 && employerpercent >= 0?formatAsMoney((monthtrip)*((100-employerpercent)/100)*((100-taxrate)/100)):"N/A")+"</td>"); //Out of Pocket Cost
+          $("#" + i).html("\n" +
+            "                  <td>" + i + "</td>\n" +
+            "                  <td>Month Pass</td>\n" + //Ticket Type
+            "                  <td>" + formatAsMoney(monthtrip) + "</td>\n" + //Listed Cost
+            "                  <td>" + (employerpercent <= 100 && employerpercent > 0 ? formatAsMoney((monthtrip) * ((100 - employerpercent) / 100)) : "N/A") + "</td>\n" + //Actual Cost
+            "                  <td>" + (taxrate <= 100 && taxrate > 0 && employerpercent <= 100 && employerpercent >= 0 ? formatAsMoney((monthtrip) * ((100 - employerpercent) / 100) * ((100 - taxrate) / 100)) : "N/A") + "</td>"); //Out of Pocket Cost
             }
-        if (((costTotal < monthtrip)?costTotal:monthtrip) == last_costTotal) {
+        if (((costTotal < monthtrip) ? costTotal : monthtrip) == last_costTotal) {
             //Hide rows that are identical to the previous row
-            $("#"+i).hide();
+          $("#" + i).hide();
             //Update last shown row to display day range
-          $("#"+last_uniqueID).children()[0].innerText = last_uniqueID + "-" + i + ((last_uniqueID == 1)?"*":"");
+          $("#" + last_uniqueID).children()[0].innerText = last_uniqueID + "-" + i + ((last_uniqueID == 1) ? "*" : "");
           } else {
-            $("#"+i).show();
+          $("#" + i).show();
             last_uniqueID = i;
           }
-          last_costTotal = (costTotal < monthtrip)?costTotal:monthtrip;
+        last_costTotal = (costTotal < monthtrip) ? costTotal : monthtrip;
         }
       }
       function setupCalendar() {
         //Set default options to those saved in cookie (if they exist)
         if ($.cookie("corp_ratetype") != undefined) {
-          $("input[name=ratetype][value='"+$.cookie("corp_ratetype")+"']").prop("checked",true);
+        $("input[name=ratetype][value='" + $.cookie("corp_ratetype") + "']").prop("checked", true);
         }
         if ($.cookie("corp_countiesstart") != undefined) {
-          $("input[name=countiesstart][value='"+$.cookie("corp_countiesstart")+"']").prop("checked",true);
+        $("input[name=countiesstart][value='" + $.cookie("corp_countiesstart") + "']").prop("checked", true);
         }
         if ($.cookie("corp_countiesend") != undefined) {
-          $("input[name=countiesend][value='"+$.cookie("corp_countiesend")+"']").prop("checked",true);
+        $("input[name=countiesend][value='" + $.cookie("corp_countiesend") + "']").prop("checked", true);
         }
         if ($.cookie("corp_employerpercent") != undefined) {
            $('#employerpercent').val($.cookie("corp_employerpercent"));
         }
         if ($.cookie("corp_taxrate") != undefined) {
-          $("input[name=taxrate][value='"+$.cookie("corp_taxrate")+"']").prop("checked",true);
+        $("input[name=taxrate][value='" + $.cookie("corp_taxrate") + "']").prop("checked", true);
         }
         if ($.cookie("corp_roundingtype") != undefined) {
-          $("input[name=roundingtype][value='"+$.cookie("corp_roundingtype")+"']").prop("checked",true);
+        $("input[name=roundingtype][value='" + $.cookie("corp_roundingtype") + "']").prop("checked", true);
         }
         if ($.cookie("corp_onlystored") != undefined) {
-          $("input[name=onlystored]").prop("checked",true);
+        $("input[name=onlystored]").prop("checked", true);
         }
 
         //Setup Accordion display
-        $( "#accordion" ).accordion({
+      $("#accordion").accordion({
           heightStyle: "content"
         });
         
@@ -135,7 +137,7 @@
           //  First Position = Ticket Type
           //  Second Position = Normal or Reduced
           //  Third Position = Counties Travelled
-            var ticketPrices = [[[[],[],[],[]],[[],[],[],[]]],[[[],[],[],[]],[[],[],[],[]]],];
+      var ticketPrices = [[[[], [], [], []], [[], [], [], []]], [[[], [], [], []], [[], [], [], []]],];
             ticketPrices[ONE_WAY][NORMAL][1] = '2.00';
             ticketPrices[ONE_WAY][NORMAL][2] = '3.00';
             ticketPrices[ONE_WAY][NORMAL][3] = '4.00';
@@ -153,14 +155,14 @@
             ticketPrices[MONTH_PASS][REDUCED][3] = '56.00';
             ticketPrices[MONTH_PASS][REDUCED][4] = '70.00';
           //Determine Ticket costs
-          var rateKind = ($("input:radio[name=ratetype]:checked").val() == "reduced"?REDUCED:NORMAL);
+      var rateKind = ($("input:radio[name=ratetype]:checked").val() == "reduced" ? REDUCED : NORMAL);
           var dist = Math.abs(parseInt($("input:radio[name=countiesend]:checked").val()) - parseInt($("input:radio[name=countiesstart]:checked").val())) + 1;
-          if (parseFloat($("#taxrate").val())<0 || parseFloat($("#taxrate").val()) > 100) {
+      if (parseFloat($("#taxrate").val()) < 0 || parseFloat($("#taxrate").val()) > 100) {
             taxrate = 0;
           } else {
             taxrate = parseFloat($("input:radio[name=taxrate]:checked").val());
           }
-          if (parseFloat($("#employerpercent").val())<0 || parseFloat($("#employerpercent").val()) > 100) {
+      if (parseFloat($("#employerpercent").val()) < 0 || parseFloat($("#employerpercent").val()) > 100) {
             employerpercent = 0;
           } else {
             employerpercent = parseFloat($("#employerpercent").val());
@@ -169,10 +171,10 @@
           leftover = parseFloat($("#leftover").val());
           
           //Update the grand total cost of all ticket types
-          roundtrip = ticketPrices[ONE_WAY][rateKind][dist]*2;
+      roundtrip = ticketPrices[ONE_WAY][rateKind][dist] * 2;
           if ($("input:checkbox[name=onlystored]:checked").val() == "on") {
             //Set round trip and month trip values impossibly high so only stored value can be an option
-            monthtrip = ticketPrices[MONTH_PASS][rateKind][dist]*40;
+        monthtrip = ticketPrices[MONTH_PASS][rateKind][dist] * 40;
           } else {
             monthtrip = ticketPrices[MONTH_PASS][rateKind][dist];
           }
@@ -185,45 +187,56 @@
 		.ui-accordion-content {
 			padding: 0 !important;
 		}
+
 		button {
 			width: 38px !important;
 		}
+
 		fieldset {
 			padding: 0;
 		}
+
 		body {
 			margin: 0;
 		}
 	 }
+
       .day {
         background-color: yellow;
       }
+
       .week {
         background-color: green;
         color: white;
         text-shadow: 0 1px 0 #000;
       }
+
       .month {
         background-color: blue;
         color: white;
         text-shadow: 0 1px 0 #000;
       }
+
       .year {
         background-color: gray;
         color: white;
         text-shadow: 0 1px 0 #000;
       }
+
       .heading {
         background-color: lightskyblue;
       }
+
       .striped {
         background-color: lightblue;
       }
+
       .taxrate {
         text-align: center;
       }
     </style>
   </head>
+
   <body>
    <div data-role="page" id="main">
       <div data-role="header" class="jqm-header">
@@ -234,8 +247,10 @@
         <h3>Ticket Cost</h3>
           <div>
             <label for="ratetype">What is your rate type?<br></label>
-              <input type="radio" name="ratetype" onchange="updateTicketCost()" value="normal" checked="checked"/>Adult (18-64)<br>
-              <input type="radio" name="ratetype" onchange="updateTicketCost()" value="reduced" />Disabled, Senior (65+), or Student (7-17)<br>
+        <input type="radio" name="ratetype" onchange="updateTicketCost()" value="normal" checked="checked" />Adult
+        (18-64)<br>
+        <input type="radio" name="ratetype" onchange="updateTicketCost()" value="reduced" />Disabled, Senior (65+), or
+        Student (7-17)<br>
             <br>
             <table>
               <tr>
@@ -256,48 +271,65 @@
               </tr>
               <tr>
                 <td>
-                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="2" checked="checked"/>Sanford, Lake Mary, Longwood, or Altamonte Springs
+              <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="2"
+                checked="checked" />Sanford, Lake Mary, Longwood, or Altamonte Springs
                 </td>
                 <td>
-                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="2" />Sanford, Lake Mary, Longwood, or Altamonte Springs
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="3" />Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or Meadow Woods
-                </td>
-                <td>
-                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="3" checked="checked"/>Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or Meadow Woods
+              <input type="radio" name="countiesend" onchange="updateTicketCost()" value="2" />Sanford, Lake Mary,
+              Longwood, or Altamonte Springs
                 </td>
               </tr>
               <tr>
                 <td>
-                  <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="4" />Tupperware, Kissimmee/Amtrak, or Poinciana
+              <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="3" />Maitland, Winter Park,
+              Florida Hospital Health Village, Lynx Central, Church Street, Orlando Health/Amtrak, Sand Lake Road, or
+              Meadow Woods
                 </td>
                 <td>
-                  <input type="radio" name="countiesend" onchange="updateTicketCost()" value="4" />Tupperware, Kissimmee/Amtrak, or Poinciana
+              <input type="radio" name="countiesend" onchange="updateTicketCost()" value="3"
+                checked="checked" />Maitland, Winter Park, Florida Hospital Health Village, Lynx Central, Church Street,
+              Orlando Health/Amtrak, Sand Lake Road, or Meadow Woods
+                </td>
+              </tr>
+              <tr>
+                <td>
+              <input type="radio" name="countiesstart" onchange="updateTicketCost()" value="4" />Tupperware,
+              Kissimmee/Amtrak, or Poinciana
+                </td>
+                <td>
+              <input type="radio" name="countiesend" onchange="updateTicketCost()" value="4" />Tupperware,
+              Kissimmee/Amtrak, or Poinciana
                 </td>
               </tr>
             </table>
             <br>
-            <label for="roundingtype">Rounding Method? (Some providers like Optum Financial only support whole dollar amounts.)<br></label>
-              <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="none"/>No Rounding (precise to the penny)<br>
-              <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="nearest" />Round to the Nearest Dollar<br>
-              <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="ticket" checked="checked"/>Round to the Nearest whole dollar Ticket<br>
+        <label for="roundingtype">Rounding Method? (Some providers like Optum Financial only support whole dollar
+          amounts.)<br></label>
+        <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="none" />No Rounding (precise to the
+        penny)<br>
+        <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="nearest" />Round to the Nearest
+        Dollar<br>
+        <input type="radio" name="roundingtype" onchange="updateTicketCost()" value="ticket" checked="checked" />Round
+        to the Nearest whole dollar Ticket<br>
             <br>
-            <label for="leftover">How much money is on your card? (Use this if you have leftover money you want to account for.)<br></label>
+        <label for="leftover">How much money is on your card? (Use this if you have leftover money you want to account
+          for.)<br></label>
               $<input type="text" id="leftover" name="leftover" onchange="updateTicketCost()" value="0" size="2" /><br>
             <br>
             <label for "onlystored">Only calculate Stored Value costs<br></label>
               <input type="checkbox" id="onlystored" name="onlystored" onchange="updateTicketCost()" /><br>
             <br>
             <br>
-            <h4>Optional (Allows for calculating your true out of pocket cost, aka the right two columns under Trip Planning)</h4>
+        <h4>Optional (Allows for calculating your true out of pocket cost, aka the right two columns under Trip
+          Planning)</h4>
             <label for="employerpercent">What percent does your employer contribute? <br></label>
-              <input type="text" id="employerpercent" name="employerpercent" onchange="updateTicketCost()" value="0" size="2" />%<br>
+        <input type="text" id="employerpercent" name="employerpercent" onchange="updateTicketCost()" value="0"
+          size="2" />%<br>
             <br>
-            <label for="taxrate">What is your tax bracket? (This is only needed if you want to know what your out of pocket equivalent would be.)<br></label>
-              <input type="radio" name="taxrate" onchange="updateTicketCost()" value="0" checked="checked"/> Prefer Not to Answer
+        <label for="taxrate">What is your tax bracket? (This is only needed if you want to know what your out of pocket
+          equivalent would be.)<br></label>
+        <input type="radio" name="taxrate" onchange="updateTicketCost()" value="0" checked="checked" /> Prefer Not to
+        Answer
               <table class="taxrate">
                 <tbody>
                   <tr class="heading">
@@ -330,7 +362,8 @@
             <p>
               These options and prices are accurate as of 1/22/2024
             </p>
-            <button style="width: auto !important;" onclick="calculateTickets();$( '#accordion' ).accordion({active: 1});">Calculate</button>
+        <button style="width: auto !important;"
+          onclick="calculateTickets();$( '#accordion' ).accordion({active: 1});">Calculate</button>
           </div>
         <h3>Trip Planning</h3>
         <div>
@@ -558,10 +591,13 @@
               *You are required to spend a minimum of $10 through the corporate program.
             </p>
           </div>
-          <button style="width: auto !important;" onclick="calculateTickets();$( '#accordion' ).accordion({active: 0});">Configure</button>
-        </div>
+        <button style="width: auto !important;"
+          onclick="calculateTickets();$( '#accordion' ).accordion({active: 0});">Configure</button>
       </div>
     </div>
-    <a href="https://docs.google.com/forms/d/1uLiFS3GI_IHAq0e9WCas3EEhDqgEFGAThIn9_OjTsgA/viewform?usp=send_form">Send Feedback</a>
+  </div>
+  <a href="https://docs.google.com/forms/d/1uLiFS3GI_IHAq0e9WCas3EEhDqgEFGAThIn9_OjTsgA/viewform?usp=send_form">Send
+    Feedback</a>
   </body>
+
 </html>
