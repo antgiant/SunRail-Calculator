@@ -24,14 +24,16 @@
       function calculateTickets() {
         var roundType = $("input:radio[name=roundingtype]:checked").val();
         var last_costTotal = -1;
-        var last_uniqueID = "";
+      var last_uniqueID = 1;
         //Master Calculation Loop
-        for (var i = 0; i < 32; i++) {
+      for (var i = 1; i < 31; i++) {
           var costTotal = 0;
+        var loopI = i;
+        while (costTotal < 10) {
           if (roundType == "nearest") {
-            costTotal = Math.ceil(((i*roundtrip) - leftover)/1.1);
-          } else if (roundType == "ticket" && ((i*roundtrip) - leftover)/1.1 > 0) {
-            for (var j = i; j < 1000; j++) {
+            costTotal = Math.ceil(((loopI*roundtrip) - leftover)/1.1);
+          } else if (roundType == "ticket" && ((loopI*roundtrip) - leftover)/1.1 > 0) {
+            for (var j = loopI; j < 1000; j++) {
               if (Math.abs((((j*roundtrip) - leftover)/1.1) - Math.round(((j*roundtrip) - leftover)/1.1)) < 0.01) {
                 costTotal = (((j*roundtrip) - leftover)/1.1);
                 j = 1001;
@@ -44,17 +46,10 @@
               costTotal = monthtrip + 10; //Just ensuring that this is always the wrong choice below.
             }
           } else { //Also includes "none"
-            costTotal = (((i*roundtrip) - leftover)/1.1);
+            costTotal = (((loopI*roundtrip) - leftover)/1.1);
           }
-          if (costTotal < 10.0) {
-            //Required to spend a minimum of $10.
-            $("#"+i).html("\n"+
-                          "                  <td>"+i+"</td>\n"+
-                          "                  <td>N/A*</td>\n"+ //Ticket Type
-                          "                  <td>N/A*</td>\n"+ //Listed Cost
-                          "                  <td>N/A*</td>\n"+ //Actual Cost
-                          "                  <td>N/A*</td>"); //Out of Pocket Cost
-          } else {
+          loopI++;
+        }
             if (costTotal < monthtrip) {
               $("#"+i).html("\n"+
                             "                  <td>"+i+"</td>\n"+
@@ -70,12 +65,11 @@
                             "                  <td>"+(employerpercent <=100 && employerpercent > 0?formatAsMoney((monthtrip)*((100-employerpercent)/100)):"N/A")+"</td>\n"+ //Actual Cost
                             "                  <td>"+(taxrate <=100 && taxrate > 0 && employerpercent <=100 && employerpercent >= 0?formatAsMoney((monthtrip)*((100-employerpercent)/100)*((100-taxrate)/100)):"N/A")+"</td>"); //Out of Pocket Cost
             }
-          }
-          if (((costTotal < monthtrip)?costTotal:monthtrip) == last_costTotal && costTotal >= 10) {
+        if (((costTotal < monthtrip)?costTotal:monthtrip) == last_costTotal) {
             //Hide rows that are identical to the previous row
             $("#"+i).hide();
             //Update last shown row to display day range
-            $("#"+last_uniqueID).children()[0].innerText = last_uniqueID + "-" + i;
+          $("#"+last_uniqueID).children()[0].innerText = last_uniqueID + "-" + i + ((last_uniqueID == 1)?"*":"");
           } else {
             $("#"+i).show();
             last_uniqueID = i;
@@ -554,13 +548,6 @@
                 </tr>
                 <tr id="30">
                   <td>30</td>
-                  <td>N/A</td>
-                  <td>N/A</td>
-                  <td>N/A</td>
-                  <td>N/A</td>
-                </tr>
-                <tr id="31">
-                  <td>31</td>
                   <td>N/A</td>
                   <td>N/A</td>
                   <td>N/A</td>
