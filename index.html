@@ -295,7 +295,6 @@
         grandTotal += parseFloat($("#week-tickets").text() * parseFloat($("#weeklytrip").val()));
         grandTotal += parseFloat($("#month-tickets").text() * parseFloat($("#monthtrip").val()));
         grandTotal += parseFloat($("#year-tickets").text() * parseFloat($("#yeartrip").val()));
-        grandTotal += parseFloat($("#reloadable-pass").text().substring(1));
         $("#grand-total").text('$' + grandTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
       }
       if (calculate)
@@ -364,9 +363,6 @@
       ticketPrices[YEAR_PASS][REDUCED][3] = '560.00';
       ticketPrices[YEAR_PASS][REDUCED][4] = '700.00';
       //Determine Ticket costs
-      reloadablePass = ($("input:radio[name=tickettype]:checked").val() == "reloadandbuy" ? 5.00 : 0.00);
-      $("#reloadable-pass").text('$' + reloadablePass.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-      var reloadable = ($("input:radio[name=tickettype]:checked").val() == "normal" ? false : true);
       var rateKind = ($("input:radio[name=ratetype]:checked").val() == "reduced" ? REDUCED : NORMAL);
       var dist = Math.abs(parseInt($("input:radio[name=countiesend]:checked").val()) - parseInt($("input:radio[name=countiesstart]:checked").val())) + 1;
       if (parseFloat($("#ratediscount").val()) < 0 || parseFloat($("#ratediscount").val()) > 100) {
@@ -377,11 +373,7 @@
 
 
       //Update the grand total cost of all ticket types
-      if (reloadable) {
-        $("#roundtrip").val(((ticketPrices[ONE_WAY][rateKind][dist] * rateDiscount) / cardDiscount) * 2);
-      } else {
-        $("#roundtrip").val((ticketPrices[ROUND_TRIP][rateKind][dist] * rateDiscount) / cardDiscount);
-      }
+      $("#roundtrip").val((ticketPrices[ROUND_TRIP][rateKind][dist] * rateDiscount) / cardDiscount);
       updateCost('day', -1, false);
       $("#weeklytrip").val(ticketPrices[WEEK_PASS][rateKind][dist] * rateDiscount);
       updateCost('week', -1, false);
@@ -540,16 +532,6 @@
         </div>
         <br>
         <fieldset>
-          <legend>Do you have a reloadable SunCard? (Gives 10% off, but turns Round-Trips into two One-Way Trips)
-          </legend>
-          <label><input type="radio" name="tickettype" onchange="updateTicketCost()" value="normal"
-              checked="checked" />No</label><br>
-          <label><input type="radio" name="tickettype" onchange="updateTicketCost()" value="reloadandbuy" />No, but I
-            will buy one</label><br>
-          <label><input type="radio" name="tickettype" onchange="updateTicketCost()" value="reload" />Yes</label><br>
-        </fieldset>
-        <br>
-        <fieldset>
           <legend>Do you get a rate discount?</legend>
           <label><input type="text" id="ratediscount" name="ratediscount" onchange="updateTicketCost()" value="0"
               size="2" />% Discount</label>
@@ -602,12 +584,6 @@
             <td id="year-tickets">0</td>
             <td>=</td>
             <td id="year-total">$0.00</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td colspan="3">Reloadable Sunpass</td>
-            <td>=</td>
-            <td id="reloadable-pass">$0.00</td>
           </tr>
           <tr>
             <td></td>
