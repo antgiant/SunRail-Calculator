@@ -10,7 +10,6 @@
   <link href="jquery-ui.min.css" rel="stylesheet">
   <script src="jquery-3.7.1.min.js"></script>
   <script src="jquery-ui.min.js"></script>
-  <script src="jquery.cookie.js"></script>
   <script>
     //Setup global variables to hold various information.
     var offset = 0;
@@ -257,26 +256,23 @@
       return dat;
     }
     function setupCalendar() {
-      //Set default options to those saved in cookie (if they exist)
-      if ($.cookie("ratetype") != undefined) {
-        $("input[name=ratetype][value='" + $.cookie("ratetype") + "']").prop("checked", true);
+      //Set default options to those saved in localstorage (if they exist)
+      if (localStorage.getItem("ratetype") !== null) {
+        $("input[name=ratetype][value='" + localStorage.getItem("ratetype") + "']").prop("checked", true);
       }
-      if ($.cookie("countiesstart") != undefined) {
-        $("input[name=countiesstart][value='" + $.cookie("countiesstart") + "']").prop("checked", true);
+      if (localStorage.getItem("countiesstart") !== null) {
+        $("input[name=countiesstart][value='" + localStorage.getItem("countiesstart") + "']").prop("checked", true);
       }
-      if ($.cookie("countiesend") != undefined) {
-        $("input[name=countiesend][value='" + $.cookie("countiesend") + "']").prop("checked", true);
+      if (localStorage.getItem("countiesend") !== null) {
+        $("input[name=countiesend][value='" + localStorage.getItem("countiesend") + "']").prop("checked", true);
       }
-      if ($.cookie("tickettype") != undefined) {
-        $("input[name=tickettype][value='" + $.cookie("tickettype") + "']").prop("checked", true);
+      if (localStorage.getItem("ratediscount") !== null) {
+        $('#ratediscount').val(localStorage.getItem("ratediscount"));
       }
-      if ($.cookie("ratediscount") != undefined) {
-        $('#ratediscount').val($.cookie("ratediscount"));
+      if (localStorage.getItem("leftover") !== null) {
+        $('#leftover').val(localStorage.getItem("leftover"));
       }
-      if ($.cookie("leftover") != undefined) {
-        $('#leftover').val($.cookie("leftover"));
-      }
-      if ($.cookie("onlystored") != undefined) {
+      if (localStorage.getItem("onlystored") !== null) {
         $("input[name=onlystored]").prop("checked", true);
       }
 
@@ -417,18 +413,17 @@
         calculateTickets();
     }
     function updateTicketCost() {
-      //Save Current Selections to a Cookie
-      $.cookie("ratetype", $("input:radio[name=ratetype]:checked").val(), { expires: 365 });
-      $.cookie("countiesstart", $("input:radio[name=countiesstart]:checked").val(), { expires: 365 });
-      $.cookie("countiesend", $("input:radio[name=countiesend]:checked").val(), { expires: 365 });
-      $.cookie("tickettype", $("input:radio[name=tickettype]:checked").val(), { expires: 365 });
-      $.cookie("ratediscount", $("#ratediscount").val(), { expires: 365 });
-      $.cookie("leftover", $("#leftover").val(), { expires: 365 });
+      //Save Current Selections to a localstorage
+      localStorage.setItem("ratetype", $("input:radio[name=ratetype]:checked").val());
+      localStorage.setItem("countiesstart", $("input:radio[name=countiesstart]:checked").val());
+      localStorage.setItem("countiesend", $("input:radio[name=countiesend]:checked").val());
+      localStorage.setItem("ratediscount", $("#ratediscount").val());
+      localStorage.setItem("leftover", $("#leftover").val());
       if ($("input:checkbox[name=onlystored]:checked").val() != undefined) {
-        $.cookie("onlystored", $("input:checkbox[name=onlystored]:checked").val(), { expires: 365 });
+        localStorage.setItem("onlystored", $("input:checkbox[name=onlystored]:checked").val());
       }
       else {
-        $.removeCookie("onlystored");
+        localStorage.removeItem("onlystored");
       }
       
       $("#display-discount-percent").text($("#ratediscount").val());
