@@ -73,6 +73,7 @@
       var nextMonth = new Date();
       var thismonth = now.getMonth();
       var start = offset;
+      var startingdayofmonth = 1;
       if (thismonth != month) {
         startdate.setMonth(month);
         startdate.setDate(1);
@@ -81,12 +82,18 @@
           nextMonth.setFullYear(now.getFullYear() + 1);
         }
         start += dateDiffInDays(now, startdate);
+      } else {
+        startingdayofmonth = now.getDate();
       }
       nextMonth.setDate(1);
       nextMonth.setMonth(month + 1);
       var end = start + dateDiffInDays(startdate, nextMonth);
+      now.setMonth(startdate.getMonth());
+      now.setDate(startdate.getDate());
+      now.setFullYear(startdate.getFullYear());
       for (i = start; i < end; i++) {
-        if (i >= offset) {
+        now.setDate(i - start + startingdayofmonth);
+        if (i >= offset && now.getDay() != 0 && now.getDay() != 6) {
           increment(i);
         }
       }
@@ -97,6 +104,7 @@
       var nextMonth = new Date();
       var thismonth = now.getMonth();
       var start = offset;
+      var startingdayofmonth = 1;
       if (thismonth != month) {
         startdate.setMonth(month);
         startdate.setDate(1);
@@ -105,12 +113,18 @@
           nextMonth.setFullYear(now.getFullYear() + 1);
         }
         start += dateDiffInDays(now, startdate);
+      } else {
+        startingdayofmonth = now.getDate();
       }
       nextMonth.setDate(1);
       nextMonth.setMonth(month + 1);
       var end = start + dateDiffInDays(startdate, nextMonth);
+      now.setMonth(startdate.getMonth());
+      now.setDate(startdate.getDate());
+      now.setFullYear(startdate.getFullYear());
       for (i = start; i < end; i++) {
-        if (i >= offset) {
+        now.setDate(i - start + startingdayofmonth);
+        if (i >= offset && now.getDay() != 0 && now.getDay() != 6) {
           decrement(i);
         }
       }
@@ -758,9 +772,7 @@
             <legend>Choose the the number of round trips per day you plan to ride:</legend>
             <table id='calendar'>
               <tr>
-                <th><button onclick="incrementWeeks(0)">&#9650;</button><br>
-                  Sun<br>
-                  <button onclick="decrementWeeks(0)">&#9660;</button>
+                <th>Sun
                 </th>
                 <th><button onclick="incrementWeeks(1)">&#9650;</button><br>
                   Mon<br>
@@ -782,9 +794,7 @@
                   Fri<br>
                   <button onclick="decrementWeeks(5)">&#9660;</button>
                 </th>
-                <th><button onclick="incrementWeeks(6)">&#9650;</button><br>
-                  Sat<br>
-                  <button onclick="decrementWeeks(6)">&#9660;</button>
+                <th>Sat
                 </th>
                 <th></th>
               </tr>
