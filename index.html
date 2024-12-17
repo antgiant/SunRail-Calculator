@@ -32,6 +32,16 @@
         calculateTickets();
       }
     }
+    //From https://stackoverflow.com/a/15289883
+    // a and b are javascript Date objects
+    function dateDiffInDays(a, b) {
+      const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+      // Discard the time and time-zone information.
+      const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+      const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+      return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+    }
     function decrement(id) {
       if (parseInt($("#" + id + " .value").text()) > 0) {
         $("#" + id + " .value").text(parseInt($("#" + id + " .value").text()) - 1);
@@ -57,12 +67,67 @@
         i += 7;
       }
     }
+    function incrementMonth(month) {
+      var now = new Date();
+      var startdate = new Date();
+      var nextMonth = new Date();
+      var thismonth = now.getMonth();
+      var start = offset;
+      if (thismonth != month) {
+        startdate.setMonth(month);
+        startdate.setDate(1);
+        if (thismonth > month) {
+          startdate.setFullYear(now.getFullYear() + 1);
+          nextMonth.setFullYear(now.getFullYear() + 1);
+        }
+        start += dateDiffInDays(now, startdate);
+      }
+      nextMonth.setDate(1);
+      nextMonth.setMonth(month + 1);
+      var end = start + dateDiffInDays(startdate, nextMonth);
+      for (i = start; i < end; i++) {
+        if (i >= offset) {
+          increment(i);
+        }
+      }
+    }
+    function decrementMonth(month) {
+      var now = new Date();
+      var startdate = new Date();
+      var nextMonth = new Date();
+      var thismonth = now.getMonth();
+      var start = offset;
+      if (thismonth != month) {
+        startdate.setMonth(month);
+        startdate.setDate(1);
+        if (thismonth > month) {
+          startdate.setFullYear(now.getFullYear() + 1);
+          nextMonth.setFullYear(now.getFullYear() + 1);
+        }
+        start += dateDiffInDays(now, startdate);
+      }
+      nextMonth.setDate(1);
+      nextMonth.setMonth(month + 1);
+      var end = start + dateDiffInDays(startdate, nextMonth);
+      for (i = start; i < end; i++) {
+        if (i >= offset) {
+          decrement(i);
+        }
+      }
+    }
     function calculateTickets() {
       //Get ticket prices
       roundtrip = parseFloat($("#roundtrip").val());
-      weektrip = parseFloat($("#weeklytrip").val());
-      monthtrip = parseFloat($("#monthtrip").val());
-      yeartrip = parseFloat($("#yeartrip").val());
+      if ($("input:checkbox[name=onlystored]:checked").val() == "on") {
+            //Set other trip values impossibly high so only round trips can be an option
+        weektrip = 1000000000.00;
+        monthtrip = 1000000000.00;
+        yeartrip = 1000000000.00;
+      } else {
+        weektrip = parseFloat($("#weeklytrip").val());
+        monthtrip = parseFloat($("#monthtrip").val());
+        yeartrip = parseFloat($("#yeartrip").val());
+      }
 
       //Remove previous ticket selections
       $("td").removeClass("day week month year");
@@ -142,7 +207,7 @@
             }
             temp[2]++;
 
-          } else if (currentTicket[i] == 7) {
+          } else if (currentTicket[i] == 7 && !($("input:checkbox[name=onlystored]:checked").val() == "on")) {
             //Ensure that we don't purchase tickets in the past.
             sanity = 0;
             if (i - 6 < 0) {
@@ -194,6 +259,31 @@
       if ($.cookie("ratediscount") != undefined) {
         $('#ratediscount').val($.cookie("ratediscount"));
       }
+      if ($.cookie("leftover") != undefined) {
+        $('#leftover').val($.cookie("leftover"));
+      }
+      if ($.cookie("onlystored") != undefined) {
+        $("input[name=onlystored]").prop("checked", true);
+      }
+
+      $("#display-discount-percent").text($("#ratediscount").val());
+      if ($("#ratediscount").val() > 0) {
+        $("#display-discount").show();
+      } else {
+        $("#display-discount").hide();
+      }
+
+      if ($("#leftover").val() > 0) {
+        $("#display-leftover-row").show();
+      } else {
+        $("#display-leftover-row").hide();
+      }
+
+      if ($("#leftover").val() > 0 || $("#ratediscount").val() > 0) {
+        $("#display-sub-total").show();
+      } else {
+        $("#display-sub-total").hide();
+      }
 
       var today = new Date();
       offset = today.getDay() + 1;
@@ -229,7 +319,8 @@
         //Setup Month Label
         if ((i + offset - 1) % 7 == 0 || i == 366) {
           if (month != temp.getMonth() || i == 366) {
-            $("#week" + start).html("<div class='vertical-text'><div class='vertical-text__inner'><strong>" + monthNames[month] + " " + (temp.getMonth() == 0 ? temp.getFullYear() - 1 : temp.getFullYear()) + "</strong></div></div>");
+            $("#week" + start).html("<div class='vertical-text'><div class='vertical-text__inner'><strong>" + monthNames[month] + " " + (temp.getMonth() == 0 ? temp.getFullYear() - 1 : temp.getFullYear()) + "</strong></div></div>" +
+              "<div class='month-buttons'><button onclick='incrementMonth("+month+")'>&#9650;</button><br><button onclick='decrementMonth("+month+")'>&#9660;</button></div>");
             $("#week" + start).attr('rowspan', (i == 366 ? end - start + 1 : end - start));
             for (j = start + 1; j < (i == 366 ? end + 1 : end); j++) {
               $("#week" + j).remove();
@@ -290,12 +381,23 @@
         //Update total cost of this ticket type
         $(d).text('$' + parseFloat($(a).val() * parseInt(number)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
-        //Update the grand total cost of all ticket types
-        grandTotal = parseFloat($("#day-tickets").text() * parseFloat($("#roundtrip").val()));
-        grandTotal += parseFloat($("#week-tickets").text() * parseFloat($("#weeklytrip").val()));
-        grandTotal += parseFloat($("#month-tickets").text() * parseFloat($("#monthtrip").val()));
-        grandTotal += parseFloat($("#year-tickets").text() * parseFloat($("#yeartrip").val()));
+        //Update the sub total cost of all ticket types
+        subTotal = parseFloat($("#day-tickets").text() * parseFloat($("#roundtrip").val()));
+        subTotal += parseFloat($("#week-tickets").text() * parseFloat($("#weeklytrip").val()));
+        subTotal += parseFloat($("#month-tickets").text() * parseFloat($("#monthtrip").val()));
+        subTotal += parseFloat($("#year-tickets").text() * parseFloat($("#yeartrip").val()));
+        $("#sub-total").text('$' + subTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+        discount = subTotal*(parseFloat($("#ratediscount").val())/100);
+        $("#display-discount-value").text('$' + discount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+        leftover = parseFloat($("#leftover").val());
+        $("#display-leftover").text('$' + leftover.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+        grandTotal = subTotal - discount - leftover;
+        grandTotal = (grandTotal<0?0:grandTotal);
         $("#grand-total").text('$' + grandTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+        
       }
       if (calculate)
         calculateTickets();
@@ -307,6 +409,38 @@
       $.cookie("countiesend", $("input:radio[name=countiesend]:checked").val(), { expires: 365 });
       $.cookie("tickettype", $("input:radio[name=tickettype]:checked").val(), { expires: 365 });
       $.cookie("ratediscount", $("#ratediscount").val(), { expires: 365 });
+      $.cookie("leftover", $("#leftover").val(), { expires: 365 });
+      if ($("input:checkbox[name=onlystored]:checked").val() != undefined) {
+        $.cookie("onlystored", $("input:checkbox[name=onlystored]:checked").val(), { expires: 365 });
+      }
+      else {
+        $.removeCookie("onlystored");
+      }
+      
+      $("#display-discount-percent").text($("#ratediscount").val());
+      if ($("#ratediscount").val() > 0) {
+        $("#display-discount").show();
+      } else {
+        $("#display-discount").hide();
+      }
+
+      if ($("#leftover").val() > 0) {
+        $("#display-leftover-row").show();
+      } else {
+        $("#display-leftover-row").hide();
+      }
+
+      if ($("#leftover").val() > 0 || $("#ratediscount").val() > 0) {
+        $("#display-sub-total").show();
+      } else {
+        $("#display-sub-total").hide();
+      }
+
+      if ($("#leftover").val() > 0 || $("#ratediscount").val() > 0) {
+        $("#sub-total").show();
+      } else {
+        $("#sub-total").hide();
+      }
 
       //Constants to help understanding
       var NORMAL = 1;
@@ -365,21 +499,18 @@
       //Determine Ticket costs
       var rateKind = ($("input:radio[name=ratetype]:checked").val() == "reduced" ? REDUCED : NORMAL);
       var dist = Math.abs(parseInt($("input:radio[name=countiesend]:checked").val()) - parseInt($("input:radio[name=countiesstart]:checked").val())) + 1;
-      if (parseFloat($("#ratediscount").val()) < 0 || parseFloat($("#ratediscount").val()) > 100) {
+      if (isNaN(parseFloat($("#ratediscount").val())) || parseFloat($("#ratediscount").val()) < 0 || parseFloat($("#ratediscount").val()) > 100) {
         $("#ratediscount").val("0");
       }
-      var cardDiscount = 1.0 + ($("input:radio[name=tickettype]:checked").val() != "normal" ? .1 : 0);
-      var rateDiscount = 1.0 - (parseFloat($("#ratediscount").val()) / 100);
 
-
-      //Update the grand total cost of all ticket types
-      $("#roundtrip").val((ticketPrices[ROUND_TRIP][rateKind][dist] * rateDiscount) / cardDiscount);
+      //Update the sub total cost of all ticket types
+      $("#roundtrip").val(ticketPrices[ROUND_TRIP][rateKind][dist]);
       updateCost('day', -1, false);
-      $("#weeklytrip").val(ticketPrices[WEEK_PASS][rateKind][dist] * rateDiscount);
+      $("#weeklytrip").val(ticketPrices[WEEK_PASS][rateKind][dist]);
       updateCost('week', -1, false);
-      $("#monthtrip").val(ticketPrices[MONTH_PASS][rateKind][dist] * rateDiscount);
+      $("#monthtrip").val(ticketPrices[MONTH_PASS][rateKind][dist]);
       updateCost('month', -1, false);
-      $("#yeartrip").val(ticketPrices[YEAR_PASS][rateKind][dist] * rateDiscount);
+      $("#yeartrip").val(ticketPrices[YEAR_PASS][rateKind][dist]);
       updateCost('year', -1, true);
 
     }
@@ -417,6 +548,10 @@
       background-color: blue;
       color: white;
       text-shadow: 0 1px 0 #000;
+    }
+
+    .month-buttons {
+      float: inline-end;
     }
 
     .year {
@@ -485,7 +620,6 @@
     <div data-role="header" class="jqm-header">
       <h1>SunRail Cost Calculator</h1>
     </div>
-    <a href="corp.html">Use Work Commuter Cost Calculator</a>
     <div data-role="content" id="accordion">
       <h3>Ticket Cost</h3>
       <div>
@@ -530,17 +664,28 @@
         </div>
         <br>
         <fieldset>
+          <legend>
+            How much money is on your card? (Use this if you have leftover money you want to account for.)
+          </legend>
+          <label>$<input type="number" id="leftover" name="leftover" onchange="updateTicketCost()" value="0" min="0" max="2000" size="2" /></label>
+        </fieldset>
+        <br>
+        <fieldset>
           <legend>Do you get a rate discount?</legend>
-          <label><input type="text" id="ratediscount" name="ratediscount" onchange="updateTicketCost()" value="0"
+          <label><input type="number" id="ratediscount" name="ratediscount" onchange="updateTicketCost()" value="0" min="0" max="100"
               size="2" />% Discount</label>
         </fieldset>
         <br>
-        <h4>Corporate Options (i.e. Commuter Tax Benefits)</h4>
+        <fieldset>
+          <legend>
+            Calculation Type
+          </legend>
+          <label><input type="checkbox" id="onlystored" name="onlystored" onchange="updateTicketCost()" /> Only
+              calculate round trip costs (Do not include other ticket types in calculations.)<br></label>
+        </fieldset>
+        <br>        
         <p>
-          Please use the separate <a href="corp.html">Corporate Calculator</a>.
-        </p>
-        <p>
-          These options and prices are accurate as of 7/30/2018
+          These options and prices are accurate as of 12/17/2024
         </p>
         <button style="width: auto !important;" onclick="$( '#accordion' ).accordion({active: 1});">Done&nbsp;</button>
       </div>
@@ -583,11 +728,29 @@
             <td>=</td>
             <td id="year-total">$0.00</td>
           </tr>
+          <tr id="display-sub-total">
+            <td></td>
+            <td colspan="3">Sub Total</td>
+            <td>=</td>
+            <td id="sub-total">$0.00</td>
+          </tr>
+          <tr id="display-leftover-row">
+            <td></td>
+            <td colspan="3">Existing Money</td>
+            <td>-</td>
+            <td id="display-leftover">$0.00</td>
+          </tr>
+          <tr id="display-discount">
+            <td></td>
+            <td colspan="3">Rate Discount (<span id="display-discount-percent">0</span>%)</td>
+            <td>-</td>
+            <td id="display-discount-value">$0.00</td>
+          </tr>
           <tr>
             <td></td>
-            <td colspan="3">Grand Total</td>
+            <td colspan="3"><strong>Grand Total</strong></td>
             <td>=</td>
-            <td id="grand-total">$0.00</td>
+            <td id="grand-total"><strong>$0.00</strong></td>
           </tr>
         </table>
         <div data-role="fieldcontain">
