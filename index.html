@@ -66,30 +66,21 @@
         i += 7;
       }
     }
-    function incrementMonth(month) {
+    function incrementMonth(month,year) {
       var now = new Date();
       var startdate = new Date();
       var nextMonth = new Date();
       var thismonth = now.getMonth();
+      var thisYear = now.getFullYear();
       var start = offset;
-      var startingdayofmonth = 1;
-      if (thismonth != month) {
-        startdate.setDate(1);
-        startdate.setMonth(month);
-        if (thismonth > month) {
-          startdate.setFullYear(now.getFullYear() + 1);
-          nextMonth.setFullYear(now.getFullYear() + 1);
-        }
-        start += dateDiffInDays(now, startdate);
-      } else {
-        startingdayofmonth = now.getDate();
+      if (thismonth != month || thisYear != year) {
+        startdate.setFullYear(year, month, 1);
       }
-      nextMonth.setDate(1);
-      nextMonth.setMonth(month + 1);
+      var startingdayofmonth = startdate.getDate();
+      start += dateDiffInDays(now, startdate);
+      nextMonth.setFullYear(year, month + 1, 1);
       var end = start + dateDiffInDays(startdate, nextMonth);
-      now.setMonth(startdate.getMonth());
-      now.setDate(startdate.getDate());
-      now.setFullYear(startdate.getFullYear());
+      now.setFullYear(startdate.getFullYear(), startdate.getMonth(), startdate.getDate());
       for (i = start; i < end; i++) {
         now.setDate(i - start + startingdayofmonth);
         if (i >= offset && now.getDay() != 0 && now.getDay() != 6) {
@@ -97,30 +88,21 @@
         }
       }
     }
-    function decrementMonth(month) {
+    function decrementMonth(month,year) {
       var now = new Date();
       var startdate = new Date();
       var nextMonth = new Date();
       var thismonth = now.getMonth();
+      var thisYear = now.getFullYear();
       var start = offset;
-      var startingdayofmonth = 1;
-      if (thismonth != month) {
-        startdate.setDate(1);
-        startdate.setMonth(month);
-        if (thismonth > month) {
-          startdate.setFullYear(now.getFullYear() + 1);
-          nextMonth.setFullYear(now.getFullYear() + 1);
-        }
-        start += dateDiffInDays(now, startdate);
-      } else {
-        startingdayofmonth = now.getDate();
+      if (thismonth != month || thisYear != year) {
+        startdate.setFullYear(year, month, 1);
       }
-      nextMonth.setDate(1);
-      nextMonth.setMonth(month + 1);
+      var startingdayofmonth = startdate.getDate();
+      start += dateDiffInDays(now, startdate);
+      nextMonth.setFullYear(year, month + 1, 1);
       var end = start + dateDiffInDays(startdate, nextMonth);
-      now.setMonth(startdate.getMonth());
-      now.setDate(startdate.getDate());
-      now.setFullYear(startdate.getFullYear());
+      now.setFullYear(startdate.getFullYear(), startdate.getMonth(), startdate.getDate());
       for (i = start; i < end; i++) {
         now.setDate(i - start + startingdayofmonth);
         if (i >= offset && now.getDay() != 0 && now.getDay() != 6) {
@@ -326,6 +308,7 @@
       //Setup Calendar
       var temp = new Date();
       var month = temp.getMonth();
+      var year = temp.getFullYear();
       var start = 1;
       var end = 1;
       for (i = 1; i <= 366; i++) {
@@ -342,8 +325,8 @@
         //Setup Month Label
         if ((i + offset - 1) % 7 == 0 || i == 366) {
           if (month != temp.getMonth() || i == 366) {
-            $("#week" + start).html("<div class='vertical-text'><div class='vertical-text__inner'><strong>" + monthNames[month] + " " + (temp.getMonth() == 0 ? temp.getFullYear() - 1 : temp.getFullYear()) + "</strong></div></div>" +
-              "<div class='month-buttons'><button onclick='incrementMonth("+month+")'>&#9650;</button><br><button onclick='decrementMonth("+month+")'>&#9660;</button></div>");
+            $("#week" + start).html("<div class='vertical-text'><div class='vertical-text__inner'><strong>" + monthNames[month] + " " + year + "</strong></div></div>" +
+              "<div class='month-buttons'><button onclick='incrementMonth("+month+","+year+")'>&#9650;</button><br><button onclick='decrementMonth("+month+","+year+")'>&#9660;</button></div>");
             $("#week" + start).attr('rowspan', (i == 366 ? end - start + 1 : end - start));
             for (j = start + 1; j < (i == 366 ? end + 1 : end); j++) {
               $("#week" + j).remove();
@@ -356,6 +339,7 @@
             }
             start = end;
             month = temp.getMonth();
+            year = temp.getFullYear();
           }
           end++;
         }
