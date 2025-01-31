@@ -269,8 +269,12 @@
       if (localStorage.getItem("ratediscount") !== null) {
         $('#ratediscount').val(localStorage.getItem("ratediscount"));
       }
-      if (localStorage.getItem("carddiscount") > 0) {
-        $("input[name=carddiscount]").prop("checked", true);
+      if (localStorage.getItem("carddiscount") !== null) {
+        if (localStorage.getItem("carddiscount") > 0) {
+          $("input[name=carddiscount]").prop("checked", true);
+        }
+      } else {
+        localStorage.setItem("carddiscount", 0);
       }
       if (localStorage.getItem("leftover") !== null) {
         $('#leftover').val(localStorage.getItem("leftover"));
