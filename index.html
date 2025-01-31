@@ -269,11 +269,20 @@
       if (localStorage.getItem("ratediscount") !== null) {
         $('#ratediscount').val(localStorage.getItem("ratediscount"));
       }
+      if (localStorage.getItem("carddiscount") > 0) {
+        $("input[name=carddiscount]").prop("checked", true);
+      }
       if (localStorage.getItem("leftover") !== null) {
         $('#leftover').val(localStorage.getItem("leftover"));
       }
       if (localStorage.getItem("onlystored") !== null) {
         $("input[name=onlystored]").prop("checked", true);
+      }
+      
+      if (localStorage.getItem("carddiscount") > 0) {
+        $("#display-card-discount").show();
+      } else {
+        $("#display-card-discount").hide();
       }
 
       $("#display-discount-percent").text($("#ratediscount").val());
@@ -289,7 +298,7 @@
         $("#display-leftover-row").hide();
       }
 
-      if ($("#leftover").val() > 0 || $("#ratediscount").val() > 0) {
+      if ($("#leftover").val() > 0 || $("#ratediscount").val() > 0 || localStorage.getItem("carddiscount") > 0) {
         $("#display-sub-total").show();
       } else {
         $("#display-sub-total").hide();
@@ -401,10 +410,13 @@
         discount = subTotal*(parseFloat($("#ratediscount").val())/100);
         $("#display-discount-value").text('$' + discount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
+        cardDiscount = subTotal*(parseFloat(localStorage.getItem("carddiscount"))/100);
+        $("#display-card-discount-value").text('$' + cardDiscount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
         leftover = parseFloat($("#leftover").val());
         $("#display-leftover").text('$' + leftover.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
-        grandTotal = subTotal - discount - leftover;
+        grandTotal = subTotal - cardDiscount - discount - leftover;
         grandTotal = (grandTotal<0?0:grandTotal);
         $("#grand-total").text('$' + grandTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
         
@@ -418,12 +430,20 @@
       localStorage.setItem("countiesstart", $("input:radio[name=countiesstart]:checked").val());
       localStorage.setItem("countiesend", $("input:radio[name=countiesend]:checked").val());
       localStorage.setItem("ratediscount", $("#ratediscount").val());
+      localStorage.setItem("carddiscount", ($("input:checkbox[name=carddiscount]:checked").val() == undefined?0:$("input:checkbox[name=carddiscount]:checked").val()));
       localStorage.setItem("leftover", $("#leftover").val());
       if ($("input:checkbox[name=onlystored]:checked").val() != undefined) {
         localStorage.setItem("onlystored", $("input:checkbox[name=onlystored]:checked").val());
       }
       else {
         localStorage.removeItem("onlystored");
+      }
+
+      $("#display-card-discount-percent").text(localStorage.getItem("carddiscount"));
+      if (localStorage.getItem("carddiscount") > 0) {
+        $("#display-card-discount").show();
+      } else {
+        $("#display-card-discount").hide();
       }
       
       $("#display-discount-percent").text($("#ratediscount").val());
@@ -439,13 +459,13 @@
         $("#display-leftover-row").hide();
       }
 
-      if ($("#leftover").val() > 0 || $("#ratediscount").val() > 0) {
+      if ($("#leftover").val() > 0 || $("#ratediscount").val() > 0 || localStorage.getItem("carddiscount") > 0) {
         $("#display-sub-total").show();
       } else {
         $("#display-sub-total").hide();
       }
 
-      if ($("#leftover").val() > 0 || $("#ratediscount").val() > 0) {
+      if ($("#leftover").val() > 0 || $("#ratediscount").val() > 0 || localStorage.getItem("carddiscount") > 0) {
         $("#sub-total").show();
       } else {
         $("#sub-total").hide();
@@ -682,7 +702,12 @@
         </fieldset>
         <br>
         <fieldset>
-          <legend>Do you get a rate discount?</legend>
+          <legend>Do you get use a Suncard? (10% Discount)</legend>
+          <label><input type="checkbox" id="carddiscount" name="carddiscount" onchange="updateTicketCost()" value="10"/></label>
+        </fieldset>
+        <br>
+        <fieldset>
+          <legend>Do you get an additional rate discount?</legend>
           <label><input type="number" id="ratediscount" name="ratediscount" onchange="updateTicketCost()" value="0" min="0" max="100"
               size="2" />% Discount</label>
         </fieldset>
@@ -750,6 +775,12 @@
             <td colspan="3">Existing Money</td>
             <td>-</td>
             <td id="display-leftover">$0.00</td>
+          </tr>
+          <tr id="display-card-discount">
+            <td></td>
+            <td colspan="3">Card Discount (10%)</td>
+            <td>-</td>
+            <td id="display-card-discount-value">$0.00</td>
           </tr>
           <tr id="display-discount">
             <td></td>
