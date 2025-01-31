@@ -702,12 +702,12 @@
         </fieldset>
         <br>
         <fieldset>
-          <legend>Do you get use a Suncard? (10% Discount)</legend>
+          <legend>Do you get use a Suncard? (10% Discount)<sup>†</sup></legend>
           <label><input type="checkbox" id="carddiscount" name="carddiscount" onchange="updateTicketCost()" value="10"/></label>
         </fieldset>
         <br>
         <fieldset>
-          <legend>Do you get an additional rate discount?</legend>
+          <legend>Do you get an additional rate discount?<sup>†</sup></legend>
           <label><input type="number" id="ratediscount" name="ratediscount" onchange="updateTicketCost()" value="0" min="0" max="100"
               size="2" />% Discount</label>
         </fieldset>
@@ -721,9 +721,11 @@
         </fieldset>
         <br>        
         <p>
-          These options and prices are accurate as of 12/17/2024
+          These options and prices are accurate as of 2/1/2025
         </p>
         <button style="width: auto !important;" onclick="$( '#accordion' ).accordion({active: 1});">Done&nbsp;</button>
+        <p><sup>†</sup> Round Grand Total up to nearest whole dollar (i.e. round $10.01 up to $11.00) if using app. This is because the app only 
+          supports whole dollar amounts. Or use <a href="https://sunrail-account.transitsherpa.com/">website</a> which supports cents.</td></p>
       </div>
       <h3>Trip Planning</h3>
       <div>
