@@ -398,13 +398,13 @@
         discount = subTotal*(parseFloat($("#ratediscount").val())/100);
         $("#display-discount-value").text('$' + discount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
-        cardDiscount = subTotal*(parseFloat(localStorage.getItem("carddiscount"))/100);
-        $("#display-card-discount-value").text('$' + cardDiscount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-
         leftover = parseFloat($("#leftover").val());
         $("#display-leftover").text('$' + leftover.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
-        grandTotal = subTotal - cardDiscount - discount - leftover;
+        cardDiscount = (subTotal - leftover)*(parseFloat(localStorage.getItem("carddiscount"))/100);
+        $("#display-card-discount-value").text('$' + cardDiscount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+
+        grandTotal = subTotal - discount - leftover - cardDiscount;
         grandTotal = (grandTotal<0?0:grandTotal);
         $("#grand-total").text('$' + grandTotal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
         
@@ -760,6 +760,12 @@
             <td>=</td>
             <td id="sub-total">$0.00</td>
           </tr>
+          <tr id="display-discount">
+            <td></td>
+            <td colspan="3">Rate Discount (<span id="display-discount-percent">0</span>%)</td>
+            <td>-</td>
+            <td id="display-discount-value">$0.00</td>
+          </tr>
           <tr id="display-leftover-row">
             <td></td>
             <td colspan="3">Existing Money</td>
@@ -771,12 +777,6 @@
             <td colspan="3">SunCard Bonus/Discount (10%)</td>
             <td>-</td>
             <td id="display-card-discount-value">$0.00</td>
-          </tr>
-          <tr id="display-discount">
-            <td></td>
-            <td colspan="3">Rate Discount (<span id="display-discount-percent">0</span>%)</td>
-            <td>-</td>
-            <td id="display-discount-value">$0.00</td>
           </tr>
           <tr>
             <td></td>
@@ -2832,5 +2832,6 @@
   <a href="https://docs.google.com/forms/d/1uLiFS3GI_IHAq0e9WCas3EEhDqgEFGAThIn9_OjTsgA/viewform?usp=send_form">Send
     Feedback</a>
 </body>
+
 
 </html>
