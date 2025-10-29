@@ -401,7 +401,7 @@
         leftover = parseFloat($("#leftover").val());
         $("#display-leftover").text('$' + leftover.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
-        cardDiscount = (subTotal - leftover)*(parseFloat(localStorage.getItem("carddiscount"))/100);
+        cardDiscount = (subTotal > leftover?(subTotal - leftover):0)*(parseFloat(localStorage.getItem("carddiscount"))/100);
         $("#display-card-discount-value").text('$' + cardDiscount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
 
         grandTotal = subTotal - discount - leftover - cardDiscount;
@@ -2835,3 +2835,4 @@
 
 
 </html>
+
